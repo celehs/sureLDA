@@ -4,7 +4,7 @@
 using namespace Rcpp;
 using namespace RcppArmadillo;
 
-
+// [[Rcpp::depends(RcppArmadillo)]]
 
 void init_lda_v2(arma::umat& wp, arma::umat& dp, arma::uvec& ztot,
                  arma::umat weight, arma::mat& prior, arma::uvec d,
