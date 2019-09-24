@@ -69,11 +69,11 @@ Simulate<-function(N=10000,K=10,M=50){
 }
 
 
-N=10000  ##Number of patients
+N=1000  ##Number of patients
 K=10     ##Number of diseases
 M=50     ##Number of features for each diseases, two of them are ICD and NLP.
 Sim <- Simulate(N,K,M)
-X <- Sim$X
+X <- Sim$X[,-1]
 Y <- Sim$Y
 filter <-Sim$filter 
 diseases <- seq(K)
@@ -81,7 +81,7 @@ HU <- Sim$X[,1]
 ICD <- Sim$X[,2:11]
 NLP <- Sim$X[,12:21]
 nPatients = N
-weight <- rep(1,(K*M))
+weight <- matrix(1,K*M,K)
 
 surelda_run <- sureLDA(X,weight,ICD,NLP,HU,filter)
 surelda_scores <- surelda_run$scores

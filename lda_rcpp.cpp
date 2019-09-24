@@ -1,10 +1,12 @@
 #include <RcppArmadillo.h>
 #include <Rcpp.h>
 #include <math.h>
+//#include <RcppArmadilloExtensions/sample.h>
 using namespace Rcpp;
 using namespace RcppArmadillo;
+// [[Rcpp::depends("RcppArmadillo")]]
 
-// [[Rcpp::depends(RcppArmadillo)]]
+
 
 void init_lda_v2(arma::umat& wp, arma::umat& dp, arma::uvec& ztot,
                  arma::umat weight, arma::mat& prior, arma::uvec d,
@@ -35,7 +37,7 @@ void init_lda_v2(arma::umat& wp, arma::umat& dp, arma::uvec& ztot,
             currprob +=  probs[ttt];
         }
         z[i] = ttt;
-        
+
         wp(ttt, w[i]) += weight(ttt,w[i]);
         dp(ttt, d[i]) += weight(ttt,w[i]);
         ztot[ttt] += weight(ttt,w[i]);
@@ -65,7 +67,7 @@ arma::umat lda_rcpp(arma::uvec d, arma::uvec w, arma::uvec z,
     arma::vec probs(T);
     arma::uvec ztot(T);
     ztot.zeros();
-    
+
     arma::umat res(T,D);
     res.zeros();
 

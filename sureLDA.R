@@ -30,12 +30,15 @@ source("FUN_PheNorm_Publish_ZH.R")
 sureLDA <- function(X,weight,ICD,NLP,HU,filter,nEmpty=20,alpha=1,beta=1,burnin=50,ITER=150){
 	knowndiseases = ncol(ICD)
 	D = knowndiseases + nEmpty
-	W = dim(X)[2]
-	N = dim(X)[1]
+	W = ncol(X)
+	N = nrow(X)
 	
 	
 	## PheNorm (Step 1) ##
+	print("Starting PheNorm")
 	prior <- sapply(1:knowndiseases, function(i){
+	  print(paste("On disease",i))
+	  
 	  mat = Matrix(data=cbind(log(ICD[,i]+1), log(NLP[,i]+1), log(ICD[,i]+NLP[,i]+1)), sparse=TRUE)
 	  note = Matrix(data=log(HU+1), sparse=TRUE)
 	  keep = which(filter[,i]==1)
@@ -51,6 +54,7 @@ sureLDA <- function(X,weight,ICD,NLP,HU,filter,nEmpty=20,alpha=1,beta=1,burnin=5
 	## Guided LDA (Step 2) ##
 	Add_probs = matrix(0,ncol=(D-knowndiseases),nrow=N)
 	prior = t(cbind(prior,Add_probs)) ##MAP_initial_probs is a matrix of N rows, 10
+	weight = t(cbind(weight,matrix(1,W,nEmpty)))
 	
 	xx=data.frame("V1"=rep(1:N,rep(W,N)),"variable"=rep(1:W,N),"value"=as.vector(t(as.matrix(X))))
 	xx = xx[xx$value>0,]
@@ -67,7 +71,10 @@ sureLDA <- function(X,weight,ICD,NLP,HU,filter,nEmpty=20,alpha=1,beta=1,burnin=5
 	
 	
 	## Clustering of surrogates with sureLDA score (Step 3) ##
+	print("Starting final clustering step")
 	posterior <- sapply(1:knowndiseases, function(i){
+	  print(paste("On disease",i))
+	  
 		mat = Matrix(data=cbind(log(ICD[,i]+1), log(NLP[,i]+1), log(LDA_Ndk_predicted[,i]+1)), sparse=TRUE)
 		note = Matrix(data=log(HU+1), sparse=TRUE)
 		keep = which(filter[,i]==1)
