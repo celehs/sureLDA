@@ -4,7 +4,7 @@ library(Matrix)
 library(flexmix)
 library(stats)
 library(abind)
-library(Cairo)
+# library(Cairo)
 library(glmnet)
 library(PRROC)
 library(Rcpp)
@@ -86,4 +86,5 @@ weight <- matrix(1,K*M,K)
 surelda_run <- sureLDA(X,weight,ICD,NLP,HU,filter)
 surelda_scores <- surelda_run$scores
 surelda_probs <- surelda_run$probs
+str(surelda_run)
 
