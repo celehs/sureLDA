@@ -1,27 +1,11 @@
-# install.packages(c("randomForest","data.table","topicmodels"), repos = "http://cran.us.r-project.org")
-
-library(Matrix)
-library(flexmix)
-library(stats)
-library(abind)
-# library(Cairo)
-library(glmnet)
-library(PRROC)
-library(Rcpp)
-library(tidyr)
-library(tidytext)
 library(bindata) ##For Multiple Y
-library(reliaR)  ##For log.gamma
-
-source('../R/sureLDA.R')
-
 
 Simulate<-function(N=10000,K=10,M=50){
   ##Generate Paramters
   Alpha <- rep(0.3,K)
   Beta <- rep(0.25,K)
   Lambda <- matrix(rep(0.2,M*K-2*K))
-
+  
   mu_positive <- rbind(
     t(sapply(1:5,function(o) c(4.5,2.1,seq(1.9,1.7,length=M-2)))),
     t(sapply(6:K,function(o) c(4.5,2.1,seq(1.9,1.7,length=M-2)))) )
@@ -31,7 +15,7 @@ Simulate<-function(N=10000,K=10,M=50){
   
   ##Prior Probability of Y
   Pi <- c(0.4,0.2,0.15,0.13,0.1,0.03,0.03,0.03,0.03,0.03)
-
+  
   ##Correlation of Multiple Y
   sigma <- matrix(0, K, K)
   sigma[1,2] <- 0.5
@@ -69,6 +53,7 @@ Simulate<-function(N=10000,K=10,M=50){
 }
 
 
+set.seed(123)
 N=1000  ##Number of patients
 K=10     ##Number of diseases
 M=50     ##Number of features for each diseases, two of them are ICD and NLP.
@@ -83,8 +68,7 @@ NLP <- Sim$X[,12:21]
 nPatients = N
 weight <- matrix(1,K*M,K)
 
-surelda_run <- sureLDA(X,weight,ICD,NLP,HU,filter)
-surelda_scores <- surelda_run$scores
-surelda_probs <- surelda_run$probs
-str(surelda_run)
+L <- list(X = X, weight = weight, ICD = ICD, NLP = NLP, HU = HU, filter = filter)
+str(L)
 
+saveRDS(L, "simdata.rds")

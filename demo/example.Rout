@@ -15,8 +15,8 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> # install.packages(c("randomForest","data.table","topicmodels"), repos = "http://cran.us.r-project.org")
-> 
+[Previously saved workspace restored]
+
 > library(Matrix)
 > library(flexmix)
 Loading required package: lattice
@@ -38,120 +38,14 @@ The following objects are masked from ‘package:Matrix’:
     expand, pack, unpack
 
 > library(tidytext)
-> library(bindata) ##For Multiple Y
 > library(reliaR)  ##For log.gamma
 > 
 > source('../R/sureLDA.R')
 > 
+> L <- readRDS("../data/simdata.rds")
 > 
-> Simulate<-function(N=10000,K=10,M=50){
-+   ##Generate Paramters
-+   Alpha <- rep(0.3,K)
-+   Beta <- rep(0.25,K)
-+   Lambda <- matrix(rep(0.2,M*K-2*K))
-+ 
-+   mu_positive <- rbind(
-+     t(sapply(1:5,function(o) c(4.5,2.1,seq(1.9,1.7,length=M-2)))),
-+     t(sapply(6:K,function(o) c(4.5,2.1,seq(1.9,1.7,length=M-2)))) )
-+   mu_negative <- rbind(
-+     t(sapply(1:5,function(o) c(0.51,0.81,seq(0.85,0.82,length=M-2)))),
-+     t(sapply(6:K,function(o) c(0.51,0.81,seq(0.85,0.81,length=M-2)))) )
-+   
-+   ##Prior Probability of Y
-+   Pi <- c(0.4,0.2,0.15,0.13,0.1,0.03,0.03,0.03,0.03,0.03)
-+ 
-+   ##Correlation of Multiple Y
-+   sigma <- matrix(0, K, K)
-+   sigma[1,2] <- 0.5
-+   sigma[2,1] <- 0.5
-+   diag(sigma)<-1
-+   ##Generate Y
-+   Y <- rmvbin(N, margprob=Pi, sigma=sigma)
-+   Y_table = apply(Y,1,function(x){t(2^(0:(K-1)))%*%t(t(x))})
-+   table(Y_table)
-+   length(table(Y_table))
-+   
-+   ##Generate X
-+   H <- rpois(N,lambda = 2)
-+   random <- t(apply(Y,1,function(y){
-+     t(sapply(1:K, function(i){
-+       yi = y[i]
-+       if(yi==1) rgamma(M, scale=mu_positive[i,], shape=1)
-+       else rgamma(M, scale=mu_negative[i,], shape=1)
-+     }))
-+   }))
-+   
-+   logX <- cbind(log(H+1)%*%t(Alpha),log(H+1)%*%t(Beta),log(H+1)%*%t(Lambda)) + log(random)
-+   X <- floor(exp(logX))
-+   ICD <- X[,1:K] 
-+   X <- cbind(H,X)
-+   colnames(X) <- c('H',paste('ICD',1:K,sep=''),paste('NLP',1:K,sep=''),paste('V',1:(M*K-2*K),sep=''))
-+   ##Filter is defined as ICD >= 1
-+   filter <- I(ICD>=1)*1
-+   
-+   i = 1
-+   for(i in 1:K){
-+     print(table(filter[,i],Y[,i],dnn=c(paste('filter',i,sep=''),paste('Diseases',i,sep='')))/N)
-+   }
-+   list(X=X,Y=Y,filter=filter)
-+ }
-> 
-> 
-> N=1000  ##Number of patients
-> K=10     ##Number of diseases
-> M=50     ##Number of features for each diseases, two of them are ICD and NLP.
-> Sim <- Simulate(N,K,M)
-       Diseases1
-filter1     0     1
-      0 0.465 0.055
-      1 0.153 0.327
-       Diseases2
-filter2     0     1
-      0 0.611 0.030
-      1 0.187 0.172
-       Diseases3
-filter3     0     1
-      0 0.679 0.014
-      1 0.188 0.119
-       Diseases4
-filter4     0     1
-      0 0.694 0.020
-      1 0.198 0.088
-       Diseases5
-filter5     0     1
-      0 0.724 0.011
-      1 0.183 0.082
-       Diseases6
-filter6     0     1
-      0 0.740 0.007
-      1 0.227 0.026
-       Diseases7
-filter7     0     1
-      0 0.751 0.006
-      1 0.222 0.021
-       Diseases8
-filter8     0     1
-      0 0.752 0.007
-      1 0.225 0.016
-       Diseases9
-filter9     0     1
-      0 0.758 0.004
-      1 0.214 0.024
-        Diseases10
-filter10     0     1
-       0 0.731 0.005
-       1 0.247 0.017
-> X <- Sim$X[,-1]
-> Y <- Sim$Y
-> filter <-Sim$filter 
-> diseases <- seq(K)
-> HU <- Sim$X[,1]
-> ICD <- Sim$X[,2:11]
-> NLP <- Sim$X[,12:21]
-> nPatients = N
-> weight <- matrix(1,K*M,K)
-> 
-> surelda_run <- sureLDA(X,weight,ICD,NLP,HU,filter)
+> set.seed(123)
+> surelda_run <- sureLDA(L$X, L$weight, L$ICD, L$NLP, L$HU, L$filter)
 [1] "Starting PheNorm"
 [1] "On disease 1"
 [1] "On disease 2"
@@ -164,9 +58,9 @@ filter10     0     1
 [1] "On disease 9"
 [1] "On disease 10"
 Initiation... 
-wp[2,3]  = 31
+wp[2,3]  = 55
 dp[2,3]  = 0
-ztot[2]  = 19594
+ztot[2]  = 24488
 weight[2,3]  =  1
 prior[2,3]  = 0
 Initiation done... 
@@ -321,9 +215,9 @@ iter 147
 iter 148
 iter 149
 Initiation... 
-wp[2,3]  = 23
+wp[2,3]  = 63
 dp[2,3]  = 0
-ztot[2]  = 19763
+ztot[2]  = 24632
 weight[2,3]  =  1
 prior[2,3]  = 0
 Initiation done... 
@@ -478,9 +372,9 @@ iter 147
 iter 148
 iter 149
 Initiation... 
-wp[2,3]  = 23
+wp[2,3]  = 57
 dp[2,3]  = 0
-ztot[2]  = 19765
+ztot[2]  = 24605
 weight[2,3]  =  1
 prior[2,3]  = 0
 Initiation done... 
@@ -635,9 +529,9 @@ iter 147
 iter 148
 iter 149
 Initiation... 
-wp[2,3]  = 28
+wp[2,3]  = 62
 dp[2,3]  = 0
-ztot[2]  = 19678
+ztot[2]  = 24641
 weight[2,3]  =  1
 prior[2,3]  = 0
 Initiation done... 
@@ -806,10 +700,9 @@ iter 149
 > surelda_probs <- surelda_run$probs
 > str(surelda_run)
 List of 2
- $ scores: num [1:1000, 1:10] 72.31833 0 78.695 0 0.00667 ...
- $ probs : num [1:1000, 1:10] 0.818865 0 0.677842 0 0.000527 ...
-> 
+ $ scores: num [1:1000, 1:10] 0.00833 54.305 0 57.19833 0 ...
+ $ probs : num [1:1000, 1:10] 6.67e-05 7.41e-01 0.00 6.43e-01 0.00 ...
 > 
 > proc.time()
    user  system elapsed 
-189.814   0.609 190.426 
+205.797   0.547 206.343 
