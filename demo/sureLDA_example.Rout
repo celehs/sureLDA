@@ -41,7 +41,7 @@ The following objects are masked from ‘package:Matrix’:
 > library(bindata) ##For Multiple Y
 > library(reliaR)  ##For log.gamma
 > 
-> source('sureLDA.R')
+> source('../R/sureLDA.R')
 > 
 > 
 > Simulate<-function(N=10000,K=10,M=50){
@@ -103,44 +103,44 @@ The following objects are masked from ‘package:Matrix’:
 > Sim <- Simulate(N,K,M)
        Diseases1
 filter1     0     1
-      0 0.470 0.051
-      1 0.147 0.332
+      0 0.465 0.055
+      1 0.153 0.327
        Diseases2
 filter2     0     1
-      0 0.611 0.029
-      1 0.204 0.156
+      0 0.611 0.030
+      1 0.187 0.172
        Diseases3
 filter3     0     1
-      0 0.670 0.023
-      1 0.212 0.095
+      0 0.679 0.014
+      1 0.188 0.119
        Diseases4
 filter4     0     1
-      0 0.669 0.025
-      1 0.196 0.110
+      0 0.694 0.020
+      1 0.198 0.088
        Diseases5
 filter5     0     1
-      0 0.696 0.024
-      1 0.214 0.066
+      0 0.724 0.011
+      1 0.183 0.082
        Diseases6
 filter6     0     1
-      0 0.749 0.004
-      1 0.226 0.021
+      0 0.740 0.007
+      1 0.227 0.026
        Diseases7
 filter7     0     1
-      0 0.753 0.004
-      1 0.215 0.028
+      0 0.751 0.006
+      1 0.222 0.021
        Diseases8
 filter8     0     1
-      0 0.740 0.003
-      1 0.226 0.031
+      0 0.752 0.007
+      1 0.225 0.016
        Diseases9
 filter9     0     1
-      0 0.734 0.008
-      1 0.242 0.016
+      0 0.758 0.004
+      1 0.214 0.024
         Diseases10
 filter10     0     1
-       0 0.741 0.002
-       1 0.234 0.023
+       0 0.731 0.005
+       1 0.247 0.017
 > X <- Sim$X[,-1]
 > Y <- Sim$Y
 > filter <-Sim$filter 
@@ -164,9 +164,9 @@ filter10     0     1
 [1] "On disease 9"
 [1] "On disease 10"
 Initiation... 
-wp[2,3]  = 46
+wp[2,3]  = 31
 dp[2,3]  = 0
-ztot[2]  = 18227
+ztot[2]  = 19594
 weight[2,3]  =  1
 prior[2,3]  = 0
 Initiation done... 
@@ -321,9 +321,9 @@ iter 147
 iter 148
 iter 149
 Initiation... 
-wp[2,3]  = 43
+wp[2,3]  = 23
 dp[2,3]  = 0
-ztot[2]  = 18340
+ztot[2]  = 19763
 weight[2,3]  =  1
 prior[2,3]  = 0
 Initiation done... 
@@ -478,9 +478,9 @@ iter 147
 iter 148
 iter 149
 Initiation... 
-wp[2,3]  = 44
+wp[2,3]  = 23
 dp[2,3]  = 0
-ztot[2]  = 18176
+ztot[2]  = 19765
 weight[2,3]  =  1
 prior[2,3]  = 0
 Initiation done... 
@@ -635,9 +635,9 @@ iter 147
 iter 148
 iter 149
 Initiation... 
-wp[2,3]  = 39
+wp[2,3]  = 28
 dp[2,3]  = 0
-ztot[2]  = 18281
+ztot[2]  = 19678
 weight[2,3]  =  1
 prior[2,3]  = 0
 Initiation done... 
@@ -806,10 +806,10 @@ iter 149
 > surelda_probs <- surelda_run$probs
 > str(surelda_run)
 List of 2
- $ scores: num [1:1000, 1:10] 0 0.00167 0 90.86833 0 ...
- $ probs : num [1:1000, 1:10] 0.000962 0.000962 0 0.977376 0 ...
+ $ scores: num [1:1000, 1:10] 72.31833 0 78.695 0 0.00667 ...
+ $ probs : num [1:1000, 1:10] 0.818865 0 0.677842 0 0.000527 ...
 > 
 > 
 > proc.time()
    user  system elapsed 
-207.803   0.658 208.462 
+189.814   0.609 190.426 

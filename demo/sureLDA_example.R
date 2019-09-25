@@ -13,7 +13,7 @@ library(tidytext)
 library(bindata) ##For Multiple Y
 library(reliaR)  ##For log.gamma
 
-source('sureLDA.R')
+source('../R/sureLDA.R')
 
 
 Simulate<-function(N=10000,K=10,M=50){

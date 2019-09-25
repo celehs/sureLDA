@@ -9,8 +9,8 @@ require(Matrix)
 require(flexmix)
 require(stats)
 
-sourceCpp("lda_rcpp.cpp")
-source("FUN_PheNorm_Publish_ZH.R")
+sourceCpp("../src/lda_rcpp.cpp")
+source("../R/FUN_PheNorm_Publish_ZH.R")
 
 # INPUT:
 # X = nPatients x nFeatures matrix of feature counts
