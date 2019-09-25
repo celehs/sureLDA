@@ -17,30 +17,10 @@ Type 'q()' to quit R.
 
 [Previously saved workspace restored]
 
-> library(Matrix)
-> library(flexmix)
-Loading required package: lattice
-> library(stats)
-> library(abind)
-> # library(Cairo)
-> library(glmnet)
-Loading required package: foreach
-Loaded glmnet 2.0-18
-
-> library(PRROC)
-> library(Rcpp)
-> library(tidyr)
-
-Attaching package: ‘tidyr’
-
-The following objects are masked from ‘package:Matrix’:
-
-    expand, pack, unpack
-
-> library(tidytext)
-> library(reliaR)  ##For log.gamma
-> 
 > source('../R/sureLDA.R')
+Loading required package: Matrix
+Loading required package: flexmix
+Loading required package: lattice
 > 
 > L <- readRDS("../data/simdata.rds")
 > 
@@ -705,4 +685,4 @@ List of 2
 > 
 > proc.time()
    user  system elapsed 
-205.797   0.547 206.343 
+200.087   0.546 200.631 

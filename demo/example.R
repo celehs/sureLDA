@@ -1,15 +1,3 @@
-library(Matrix)
-library(flexmix)
-library(stats)
-library(abind)
-# library(Cairo)
-library(glmnet)
-library(PRROC)
-library(Rcpp)
-library(tidyr)
-library(tidytext)
-library(reliaR)  ##For log.gamma
-
 source('../R/sureLDA.R')
 
 L <- readRDS("../data/simdata.rds")

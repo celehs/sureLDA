@@ -1,8 +1,8 @@
+## dat: all data columns need to be log-transformed and need column names; ##
+## nm.logS.ori is the name of the surrogates (log(ICD+1), log(NLP+1) and log(ICD+NLP+1)
+## nm.utl: is the name of healthcare utlization (e.g. note count, encounter_num etc)
+## nm.X: additional features other than the main ICD and NLP
 PheNorm.Prob = function(nm.logS.ori,nm.utl,dat, nm.X=NULL,corrupt.rate=0.3,train.size=10000){
-  ## dat: all data columns need to be log-transformed and need column names; ##
-  ## nm.logS.ori is the name of the surrogates (log(ICD+1), log(NLP+1) and log(ICD+NLP+1)
-  ## nm.utl: is the name of healthcare utlization (e.g. note count, encounter_num etc)
-  ## nm.X: additional features other than the main ICD and NLP
   dat = as.matrix(dat)
   S.ori = dat[,nm.logS.ori,drop=F]; utl = dat[,nm.utl]
   a.hat = apply(S.ori, 2, function(S){findMagicNumber(S,utl)$coef})
@@ -18,23 +18,23 @@ PheNorm.Prob = function(nm.logS.ori,nm.utl,dat, nm.X=NULL,corrupt.rate=0.3,train
     b.all = b.all[-dim(b.all)[1],]
   }
   else{
-  	b.all = NULL
+    b.all = NULL
   }
   if(length(nm.logS.ori)>1){
     postprob = apply(S.norm,2,function(x){fit = normalmixEM2comp2(x, lambda=0.5, mu=quantile(x,probs=c(1/3,2/3)), sigsqrd=sd(S.norm)/2);fit$posterior[,2]})
     list("probs"=rowMeans(postprob,na.rm = T), "betas"=b.all)
-   
+    
   }else{
-     fit = normalmixEM2comp2(unlist(S.norm), lambda=0.5, mu=quantile(S.norm,probs=c(1/3,2/3)), sigsqrd=sd(S.norm)/2)
-     list("probs"=fit$posterior[,2], "betas"=b.all)
+    fit = normalmixEM2comp2(unlist(S.norm), lambda=0.5, mu=quantile(S.norm,probs=c(1/3,2/3)), sigsqrd=sd(S.norm)/2)
+    list("probs"=fit$posterior[,2], "betas"=b.all)
   }
 }
 
+## dat: all data columns need to be log-transformed and need column names; ##
+## nm.logS.ori is the name of the surrogates (log(ICD+1), log(NLP+1) and log(ICD+NLP+1)
+## nm.utl: is the name of healthcare utlization (e.g. note count, encounter_num etc)
+## nm.X: additional features other than the main ICD and NLP
 PheNorm = function(nm.logS.ori,nm.utl,dat, nm.X=NULL,corrupt.rate=0.3,train.size=100000){
-  ## dat: all data columns need to be log-transformed and need column names; ##
-  ## nm.logS.ori is the name of the surrogates (log(ICD+1), log(NLP+1) and log(ICD+NLP+1)
-  ## nm.utl: is the name of healthcare utlization (e.g. note count, encounter_num etc)
-  ## nm.X: additional features other than the main ICD and NLP
   dat = as.matrix(dat)
   S.ori = dat[,nm.logS.ori,drop=F]; utl = dat[,nm.utl]
   a.hat = apply(as.matrix(S.ori), 2, function(S){findMagicNumber(S,utl)$coef})
@@ -50,7 +50,7 @@ PheNorm = function(nm.logS.ori,nm.utl,dat, nm.X=NULL,corrupt.rate=0.3,train.size
     b.all = b.all[-dim(b.all)[1],]
   }
   else{
-  	b.all = NULL
+    b.all = NULL
   }
   if(length(nm.logS.ori)>1){
     postprob = apply(S.norm,2,function(x){fit = normalmixEM2comp2(x, lambda=0.5, mu=quantile(x,probs=c(1/3,2/3)), sigsqrd=1);fit$posterior[,2]})
@@ -58,7 +58,7 @@ PheNorm = function(nm.logS.ori,nm.utl,dat, nm.X=NULL,corrupt.rate=0.3,train.size
     keep = as.matrix(1*(keep>=0)); if(nrow(keep)!=nrow(dat)){keep=t(keep)}
     list("scores"=rowMeans(S.norm*keep,na.rm = T), "betas"=b.all)    
   }else{
-  	list("scores"=unlist(S.norm), "betas"=b.all)
+    list("scores"=unlist(S.norm), "betas"=b.all)
   }
 }
 
