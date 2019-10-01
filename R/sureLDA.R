@@ -5,9 +5,9 @@
 # install.packages(c("Rcpp","RcppArmadillo","Matrix","flexmix","stats"), repos = "http://cran.us.r-project.org")
 library(Rcpp)
 library(RcppArmadillo)
-require(Matrix)
-require(flexmix)
-require(stats)
+library(Matrix)
+library(flexmix)
+# library(stats)
 
 sourceCpp("../src/lda_rcpp.cpp")
 source("../R/FUN_PheNorm_Publish_ZH.R")
