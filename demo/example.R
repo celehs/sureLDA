@@ -1,4 +1,4 @@
-source('../R/sureLDA.R')
+library(sureLDA)
 
 L <- readRDS("../data/simdata.rds")
 

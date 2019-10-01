@@ -1,0 +1,15 @@
+Package: sureLDA
+Type: Package
+Title: A Novel Multi-Disease Automated Phenotyping Method for the Electronic Health Record
+Version: 0.1.0
+Authors@R: c(
+    person("Yuri", "Ahuja", role = c("aut", "cre"), email = "Yuri_Ahuja@hms.harvard.edu")
+    )
+Description: A Novel Multi-Disease Automated Phenotyping Method for the Electronic Health Record.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1
+Depends: Matrix
+Imports: Rcpp, RcppArmadillo
+LinkingTo: Rcpp, RcppArmadillo

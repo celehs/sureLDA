@@ -3,14 +3,14 @@
 # Last Updated: 9/19/2019
 
 # install.packages(c("Rcpp","RcppArmadillo","Matrix","flexmix","stats"), repos = "http://cran.us.r-project.org")
-library(Rcpp)
-library(RcppArmadillo)
-library(Matrix)
-library(flexmix)
+# library(Rcpp)
+# library(RcppArmadillo)
+# library(Matrix)
+# library(flexmix)
 # library(stats)
 
-sourceCpp("../src/lda_rcpp.cpp")
-source("../R/FUN_PheNorm_Publish_ZH.R")
+# sourceCpp("../src/sureLDA.cpp")
+# source("../R/FUN_PheNorm_Publish_ZH.R")
 
 # INPUT:
 # X = nPatients x nFeatures matrix of feature counts
@@ -27,6 +27,19 @@ source("../R/FUN_PheNorm_Publish_ZH.R")
 # scores = nPatients x nPhenotypes matrix of sureLDA phenotype scores
 # probs = nPatients x nPhenotypes matrix of posterior probabilities (post-clustering of sureLDA scores)
 
+#' ...
+#' @param X nPatients x nFeatures matrix of feature counts
+#' @param weight nPhenotypes x nFeatures matrix of phenotype-specific feature weights
+#' @param ICD nPatients x nPhenotypes matrix of main ICD surrogate counts
+#' @param NLP nPatients x nPhenotypes matrix of main NLP surrogate counts
+#' @param HU nPatients-dimensional hospital utilization vector
+#' @param filter nPatients x nPhenotypes binary matrix indicating filter-positives
+#' @param nEmpty Number of 'empty' topics to include in LDA step
+#' @param alpha LDA hyperparameters
+#' @param beta LDA hyperparameters
+#' @param burnin number of burnin Gibbs iterations
+#' @param ITER number of subsequent iterations for inference
+#' @export
 sureLDA <- function(X,weight,ICD,NLP,HU,filter,nEmpty=20,alpha=1,beta=1,burnin=50,ITER=150){
   knowndiseases = ncol(ICD)
   D = knowndiseases + nEmpty

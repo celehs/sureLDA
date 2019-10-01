@@ -15,12 +15,8 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-[Previously saved workspace restored]
-
-> source('../R/sureLDA.R')
+> library(sureLDA)
 Loading required package: Matrix
-Loading required package: flexmix
-Loading required package: lattice
 > 
 > L <- readRDS("../data/simdata.rds")
 > 
@@ -685,4 +681,4 @@ List of 2
 > 
 > proc.time()
    user  system elapsed 
-200.087   0.546 200.631 
+194.629   0.146 194.772 
