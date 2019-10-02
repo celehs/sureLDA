@@ -14,3 +14,17 @@ vignette: >
 ```{r setup}
 library(sureLDA)
 ```
+
+```{r}
+str(simdata)
+```
+
+```{r}
+set.seed(123)
+surelda_run <- with(simdata, sureLDA(X, weight, ICD, NLP, HU, filter))
+surelda_scores <- surelda_run$scores
+surelda_probs <- surelda_run$probs
+str(surelda_run)
+```
+
+
