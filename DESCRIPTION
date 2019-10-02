@@ -16,3 +16,7 @@ RoxygenNote: 6.1.1
 Depends: R (>= 3.0), Matrix
 Imports: Rcpp, RcppArmadillo
 LinkingTo: Rcpp, RcppArmadillo
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
