@@ -27,4 +27,8 @@ surelda_probs <- surelda_run$probs
 str(surelda_run)
 ```
 
+```{r}
+proc.time()
+```
+
 
