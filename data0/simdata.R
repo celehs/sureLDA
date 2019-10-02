@@ -1,5 +1,3 @@
-## code to prepare `DATASET` dataset goes here
-
 library(bindata) ##For Multiple Y
 
 Simulate<-function(N=10000,K=10,M=50){
@@ -71,5 +69,3 @@ weight <- matrix(1,K*M,K)
 
 simdata <- list(X = X, weight = weight, ICD = ICD, NLP = NLP, HU = HU, filter = filter)
 str(simdata)
-
-usethis::use_data(simdata)
