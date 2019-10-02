@@ -11,4 +11,7 @@ simdata
 \description{
 Simulated Dataset
 }
+\examples{
+str(simdata)
+}
 \keyword{datasets}

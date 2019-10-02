@@ -1,33 +1,5 @@
-# sureLDA.R: Contains sureLDA function. See Ahuja et al. (2019), JAMIA (in revision) for details.
-# Author: Yuri Ahuja
-# Last Updated: 9/19/2019
-
-# install.packages(c("Rcpp","RcppArmadillo","Matrix","flexmix","stats"), repos = "http://cran.us.r-project.org")
-# library(Rcpp)
-# library(RcppArmadillo)
-# library(Matrix)
-# library(flexmix)
-# library(stats)
-
-# sourceCpp("../src/sureLDA.cpp")
-# source("../R/FUN_PheNorm_Publish_ZH.R")
-
-# INPUT:
-# X = nPatients x nFeatures matrix of feature counts
-# weights = nPhenotypes x nFeatures matrix of phenotype-specific feature weights
-# ICD = nPatients x nPhenotypes matrix of main ICD surrogate counts
-# NLP = nPatients x nPhenotypes matrix of main NLP surrogate counts
-# HU = nPatients-dimensional hospital utilization vector
-# filter = nPatients x nPhenotypes binary matrix indicating filter-positives
-# nEmpty = Number of 'empty' topics to include in LDA step
-# alpha, beta = LDA hyperparameters
-# burnin = number of burnin Gibbs iterations; ITER = number of subsequent iterations for inference
-
-# OUTPUT:
-# scores = nPatients x nPhenotypes matrix of sureLDA phenotype scores
-# probs = nPatients x nPhenotypes matrix of posterior probabilities (post-clustering of sureLDA scores)
-
-#' ...
+#' Surrogate-guided ensemble Latent Dirichlet Allocation
+#' 
 #' @param X nPatients x nFeatures matrix of feature counts
 #' @param weight nPhenotypes x nFeatures matrix of phenotype-specific feature weights
 #' @param ICD nPatients x nPhenotypes matrix of main ICD surrogate counts
@@ -39,6 +11,7 @@
 #' @param beta LDA hyperparameters
 #' @param burnin number of burnin Gibbs iterations
 #' @param ITER number of subsequent iterations for inference
+#' @return scores = nPatients x nPhenotypes matrix of sureLDA phenotype scores; probs = nPatients x nPhenotypes matrix of posterior probabilities (post-clustering of sureLDA scores)
 #' @export
 sureLDA <- function(X,weight,ICD,NLP,HU,filter,nEmpty=20,alpha=1,beta=1,burnin=50,ITER=150){
   knowndiseases = ncol(ICD)

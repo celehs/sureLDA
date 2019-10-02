@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>... — sureLDA • sureLDA</title>
+<title>Surrogate-guided ensemble Latent Dirichlet Allocation — sureLDA • sureLDA</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,8 +42,8 @@
 
 
 
-<meta property="og:title" content="... — sureLDA" />
-<meta property="og:description" content="..." />
+<meta property="og:title" content="Surrogate-guided ensemble Latent Dirichlet Allocation — sureLDA" />
+<meta property="og:description" content="Surrogate-guided ensemble Latent Dirichlet Allocation" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -115,13 +115,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>...</h1>
+    <h1>Surrogate-guided ensemble Latent Dirichlet Allocation</h1>
     <small class="dont-index">Source: <a href='https://github.com/celehs/sureLDA/blob/master/R/sureLDA.R'><code>R/sureLDA.R</code></a></small>
     <div class="hidden name"><code>sureLDA.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>...</p>
+    <p>Surrogate-guided ensemble Latent Dirichlet Allocation</p>
     </div>
 
     <pre class="usage"><span class='fu'>sureLDA</span>(<span class='no'>X</span>, <span class='no'>weight</span>, <span class='no'>ICD</span>, <span class='no'>NLP</span>, <span class='no'>HU</span>, <span class='no'>filter</span>, <span class='kw'>nEmpty</span> <span class='kw'>=</span> <span class='fl'>20</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>1</span>,
@@ -176,12 +176,16 @@
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>scores = nPatients x nPhenotypes matrix of sureLDA phenotype scores; probs = nPatients x nPhenotypes matrix of posterior probabilities (post-clustering of sureLDA scores)</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
     </ul>
 
   </div>
@@ -190,7 +194,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Yuri Ahuja, Tianxi Cai.</p>
+  <p>Developed by Yuri Ahuja, Tianxi Cai,  PARSE Health.</p>
 </div>
 
 <div class="pkgdown">

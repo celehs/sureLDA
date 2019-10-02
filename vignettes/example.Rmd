@@ -7,10 +7,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
-# knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
-```
-
 ```{r setup}
 library(sureLDA)
 ```
@@ -19,7 +15,7 @@ library(sureLDA)
 str(simdata)
 ```
 
-```{r}
+```{r, eval=TRUE}
 set.seed(123)
 surelda_run <- with(simdata, sureLDA(X, weight, ICD, NLP, HU, filter))
 surelda_scores <- surelda_run$scores
@@ -30,5 +26,3 @@ str(surelda_run)
 ```{r}
 proc.time()
 ```
-
-

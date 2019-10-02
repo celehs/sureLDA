@@ -2,7 +2,7 @@
 % Please edit documentation in R/sureLDA.R
 \name{sureLDA}
 \alias{sureLDA}
-\title{...}
+\title{Surrogate-guided ensemble Latent Dirichlet Allocation}
 \usage{
 sureLDA(X, weight, ICD, NLP, HU, filter, nEmpty = 20, alpha = 1,
   beta = 1, burnin = 50, ITER = 150)
@@ -30,6 +30,9 @@ sureLDA(X, weight, ICD, NLP, HU, filter, nEmpty = 20, alpha = 1,
 
 \item{ITER}{number of subsequent iterations for inference}
 }
+\value{
+scores = nPatients x nPhenotypes matrix of sureLDA phenotype scores; probs = nPatients x nPhenotypes matrix of posterior probabilities (post-clustering of sureLDA scores)
+}
 \description{
-...
+Surrogate-guided ensemble Latent Dirichlet Allocation
 }
