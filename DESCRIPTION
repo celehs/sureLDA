@@ -4,9 +4,11 @@ Title: A Novel Multi-Disease Automated Phenotyping Method for the Electronic Hea
 Version: 0.1.0
 Authors@R: c(
     person("Yuri", "Ahuja", role = c("aut", "cre"), email = "Yuri_Ahuja@hms.harvard.edu"),
-    person("Tianxi", "Cai", role = c("aut"))    
+    person("Tianxi", "Cai", role = c("aut"))   
     )
 Description: A Novel Multi-Disease Automated Phenotyping Method for the Electronic Health Record.
+URL: https://github.com/celehs/sureLDA
+BugReports: https://github.com/celehs/sureLDA/issues
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
