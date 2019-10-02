@@ -1,3 +1,5 @@
+## code to prepare `DATASET` dataset goes here
+
 library(bindata) ##For Multiple Y
 
 Simulate<-function(N=10000,K=10,M=50){
@@ -52,7 +54,6 @@ Simulate<-function(N=10000,K=10,M=50){
   list(X=X,Y=Y,filter=filter)
 }
 
-
 set.seed(123)
 N=1000  ##Number of patients
 K=10     ##Number of diseases
@@ -68,7 +69,7 @@ NLP <- Sim$X[,12:21]
 nPatients = N
 weight <- matrix(1,K*M,K)
 
-L <- list(X = X, weight = weight, ICD = ICD, NLP = NLP, HU = HU, filter = filter)
-str(L)
+simdata <- list(X = X, weight = weight, ICD = ICD, NLP = NLP, HU = HU, filter = filter)
+str(simdata)
 
-saveRDS(L, "simdata.rds")
+usethis::use_data(simdata)
