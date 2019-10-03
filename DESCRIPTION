@@ -5,7 +5,7 @@ Version: 0.1.0
 Authors@R: c(
     person("Yuri", "Ahuja", role = c("aut", "cre"), email = "Yuri_Ahuja@hms.harvard.edu"),
     person("Tianxi", "Cai", role = c("aut")),
-    person(family = "PARSE Health", role = c("aut"))   
+    person(family = "PARSE LTD", role = c("aut"))   
     )
 Description: A Novel Multi-Disease Automated Phenotyping Method for the Electronic Health Record.
 URL: https://github.com/celehs/sureLDA
