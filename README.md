@@ -20,7 +20,7 @@ devtools::install_github("celehs/sureLDA")
 
 ## Getting Started
 
-Click [HERE](articles/example.html) to view a demo with a simulated example.
+Click [HERE](https://celehs.github.io/sureLDA/articles/example.html) to view a demo with a simulated example.
 
 ## References
 
