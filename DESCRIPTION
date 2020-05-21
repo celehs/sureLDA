@@ -7,6 +7,7 @@ Authors@R: c(
     person("Tianxi", "Cai", role = c("aut")),
     person(family = "PARSE LTD", role = c("aut"))   
     )
+Maintainer: Yuri Ahuja <Yuri_Ahuja@hms.harvard.edu>
 Description: A Novel Multi-Disease Automated Phenotyping Method for the Electronic Health Record.
 URL: https://github.com/celehs/sureLDA
 BugReports: https://github.com/celehs/sureLDA/issues
