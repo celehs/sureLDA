@@ -1,8 +1,8 @@
 ## Overview
 
-Surrogate-guided ensemble Latent Dirichlet Allocation (sureLDA) is a label-free multidimensional phenotyping method. It first uses the PheNorm algorithm to initialize probabilities based on two surrogate features for each target disease, and then leverages these probabilities to guide the LDA topic model to generate phenotype-specific topics. Finally, it combines phenotype-feature counts with surrogates via clustering ensemble to yield final phenotype probabilities. 
+Surrogate-guided ensemble Latent Dirichlet Allocation (sureLDA) is a label-free multidimensional phenotyping method. It first uses the PheNorm or MAP algorithm to initialize probabilities based on two surrogate features for each target disease, and then leverages these probabilities to guide the LDA topic model to generate phenotype-specific topics. Finally, it combines phenotype-feature counts with surrogates via clustering ensemble to yield final phenotype probabilities. 
 
-See Ahuja et al. (2019) for details.
+See Ahuja et al. JAMIA (2020) for details.
 
 ## Installation
 
@@ -24,4 +24,4 @@ Click [HERE](https://celehs.github.io/sureLDA/articles/example.html) to view a d
 
 ## References
 
-Y. Ahuja, D. Zhou, Z. He, J. Sun, V. M. Castro, V. Gainer, S. N. Murphy, C. Hong, T. Cai (2019). sureLDA: A Novel Multi-Disease Automated Phenotyping Method for the Electronic Health Record. JAMIA (in revision).
+Y. Ahuja, D. Zhou, Z. He, J. Sun, V. M. Castro, V. Gainer, S. N. Murphy, C. Hong, T. Cai (2020). sureLDA: A Multi-Disease Automated Phenotyping Method for the Electronic Health Record. JAMIA.
