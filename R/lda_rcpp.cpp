@@ -79,9 +79,6 @@ arma::umat lda_rcpp(arma::uvec d, arma::uvec w, arma::uvec z,
     arma::umat dp(T,D);
     dp.zeros();
 
-    unordered_map<int, vector<pair<int,double>>>* topicMap = new unordered_map<int, vector<pair<int,double>>>();
-    
-    
     Rcout << "Initiation... \n";
     
     init_lda_v2(wp, dp, ztot, weight, prior, d, w, z, N, T, knowndiseases);
