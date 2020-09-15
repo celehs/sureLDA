@@ -128,7 +128,10 @@ arma::umat lda_rcpp(arma::uvec d, arma::uvec w, arma::uvec z,
                    res(t,i) += dp(t,i);
                }
             }
-            Rcout << "iter " << iter-burnin << "\n";
+            Rcout << "Iteration " << iter-burnin << "\n";
+        }
+        else{
+            Rcout << "Burnin " << iter << "\n";
         }
     }
     
