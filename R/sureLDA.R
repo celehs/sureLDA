@@ -1,6 +1,6 @@
 # sureLDA.R: Contains sureLDA function. See Ahuja et al. (2020), JAMIA for details.
 # Author: Yuri Ahuja
-# Last Updated: 6/18/2020
+# Last Updated: 9/12/2020
 
 library(Rcpp)
 library(RcppArmadillo)
