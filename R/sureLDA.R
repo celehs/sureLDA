@@ -16,11 +16,6 @@ source("../sureLDA/MAP.R")
 sourceCpp("../sureLDA/lda_rcpp.cpp")
 
 
-logfile <- "sureLDA_logfile.txt"
-writeLines(c(""), file(logfile,'w'))
-clust <- makeCluster(5, outfile=logfile)
-registerDoParallel(clust)
-
 # INPUT:
 # X = nPatients x nFeatures matrix of feature counts
 # weights = nPhenotypes x nFeatures matrix of phenotype-specific feature weights
@@ -51,10 +46,10 @@ sureLDA <- function(X,ICD,NLP,HU,filter,prior='PheNorm',weight='beta',nEmpty=20,
 	
 	## PheNorm/MAP (Step 1) ##
 	
-	if (length(prior) > 1){
+	if (typeof(prior) != 'character'){
 	  print('Prior supplied')
 	}
-	else if (prior == 'PheNorm' & (length(weight) > 1 | weight == 'uniform')){
+	else if (prior == 'PheNorm' & (typeof(weight) != 'character' | weight == 'uniform')){
 	  print("Starting PheNorm")
 	  prior <- sapply(1:knowndiseases, function(i){
 	    print(paste("Predicting disease",i))
@@ -106,7 +101,7 @@ sureLDA <- function(X,ICD,NLP,HU,filter,prior='PheNorm',weight='beta',nEmpty=20,
 	    score
 	  })
 	  
-	  if (length(weight) == 1 & weight == 'beta'){
+	  if (typeof(weight)=='character' & weight == 'beta'){
 	    weight <- t(sapply(1:knowndiseases, function(i){
 	      print(paste("Predicting weight",i))
 	      filterpos = which(filter[,i]==1)
@@ -124,7 +119,7 @@ sureLDA <- function(X,ICD,NLP,HU,filter,prior='PheNorm',weight='beta',nEmpty=20,
 	  print("Finishing MAP")
 	}
 	
-	if (length(weight) == 1 & weight == 'uniform'){
+	if (typeof(weight) == 'character' & weight == 'uniform'){
 	  weight = matrix(100,nrow=knowndiseases,ncol=W)
 	}
 	
@@ -153,8 +148,7 @@ sureLDA <- function(X,ICD,NLP,HU,filter,prior='PheNorm',weight='beta',nEmpty=20,
 	  
 	  print('Starting Gibbs Sampling')
 	  
-	  res = foreach(it=1:4, .combine=rbind) %do% {
-	    #	  sourceCpp("../sureLDA/lda_rcpp.cpp")
+	  res = foreach(it=1:3) %do% {
 	    print(paste('On iteration',it))
 	    lda_rcpp(d,w,z,weight,priorLDA,alpha,beta,D,knowndiseases,burnin,ITER)[1:knowndiseases,]
 	  }
@@ -162,22 +156,22 @@ sureLDA <- function(X,ICD,NLP,HU,filter,prior='PheNorm',weight='beta',nEmpty=20,
 	  print('Finishing Gibbs Sampling')
 	  
 	  if (knowndiseases == 1){
-	    LDA_Ndk_predicted = as.matrix(res[[1]] + res[[2]] + res[[3]] + res[[4]]) / (4*alpha*ITER)
+	    LDA_Ndk_predicted = as.matrix(res[[1]] + res[[2]] + res[[3]]) / (3*alpha*ITER)
 	  }
 	  else{
-	    LDA_Ndk_predicted = t(res[[1]] + res[[2]] + res[[3]] + res[[4]]) / (4*alpha*ITER)
+	    LDA_Ndk_predicted = t(res[[1]] + res[[2]] + res[[3]]) / (3*alpha*ITER)
 	  }
 	}
 	else{
 	  print("Inferring theta given provided phi")
 	  LDA_Ndk_predicted <- foreach(i=1:N, .combine=rbind) %dopar% {
-	    prior_i <- c(prior[i,],rep(0,D-knowndiseases)); prior_i <- prior_i/sum(prior_i)
+	    prior_i <- c(prior[i,],rep(0,nEmpty)); prior_i <- prior_i/sum(prior_i)
 	    post_i <- t(prior_i * phi); post_i <- post_i / rowSums(post_i)
 	    z_i <- c(t(post_i) %*% X[i,])
 	    old <- rep(0,D)
-	    while (any(z_i-old >= 0.001)){
+	    while (any(z_i-old >= 0.1)){
 	      old <- z_i
-	      prior_i <- c(prior[i,],rep(1,D-knowndiseases)) + z_i; prior_i <- prior_i/sum(prior_i)
+	      prior_i <- c(prior[i,],rep(1,nEmpty)) + z_i; prior_i <- prior_i/sum(prior_i)
 	      post_i <- t(prior_i * phi); post_i <- post_i / rowSums(post_i)
 	      z_i <- c(t(post_i) %*% X[i,])
 	    }

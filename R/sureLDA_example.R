@@ -82,7 +82,11 @@ ICD <- Sim$X[,2:11]
 NLP <- Sim$X[,12:21]
 nPatients = N
 
-surelda_run <- sureLDA(X,ICD,NLP,HU,filter)
-surelda_scores <- surelda_run$scores
-surelda_ensemble <- surelda_run$ensemble
+surelda_run_phenorm <- sureLDA(X,ICD,NLP,HU,filter)
+surelda_scores_phenorm <- surelda_run_phenorm$scores
+surelda_ensemble_phenorm <- surelda_run_phenorm$ensemble
+
+surelda_run_map <- sureLDA(X,ICD,NLP,HU,filter)
+surelda_scores_map <- surelda_run_phenorm$scores
+surelda_ensemble_map <- surelda_run_phenorm$ensemble
 
