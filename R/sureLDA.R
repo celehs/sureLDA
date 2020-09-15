@@ -11,9 +11,9 @@ library(foreach)
 library(doParallel)
 library(glmnet)
 
-source("../sureLDA/PheNorm.R")
-source("../sureLDA/MAP.R")
-sourceCpp("../sureLDA/lda_rcpp.cpp")
+# source("../sureLDA/PheNorm.R")
+# source("../sureLDA/MAP.R")
+# sourceCpp("../sureLDA/lda_rcpp.cpp")
 
 
 # INPUT:
