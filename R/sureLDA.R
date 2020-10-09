@@ -2,15 +2,6 @@
 # Author: Yuri Ahuja
 # Last Updated: 9/12/2020
 
-library(Rcpp)
-library(RcppArmadillo)
-require(Matrix)
-require(flexmix)
-require(stats)
-library(foreach)
-library(doParallel)
-library(glmnet)
-
 # source("../sureLDA/PheNorm.R")
 # source("../sureLDA/MAP.R")
 # sourceCpp("../sureLDA/lda_rcpp.cpp")
