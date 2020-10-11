@@ -91,15 +91,18 @@ sureLDA <- function(X,ICD,NLP,HU,filter,prior='PheNorm',weight='beta',nEmpty=20,
 	    print(paste("Predicting prior",i))
 	    
 	    filterpos = which(filter[,i]==1)
-	    dat.icd = data.frame(ID=1:length(filterpos), disease=ICD[filterpos,i])
-	    dat.nlp = data.frame(ID=1:length(filterpos), disease=NLP[filterpos,i])
-	    dat.note = data.frame(ID=1:length(filterpos), note=HU[filterpos])
-	    nm.phe = 'disease'; nm.ID = 'ID'; nm.utl = 'note';
+	    mat = Matrix(data=cbind(ICD[filterpos,i],NLP[filterpos,i]), sparse=TRUE)
+	    colnames(mat) = c('ICD','NLP')
+	    note = Matrix(HU[filterpos], sparse=TRUE)
 	    
 	    score = rep(0,N)
-	    score[filterpos] = as.vector(MAP_PheWAS_main(dat.icd=dat.icd, dat.nlp=dat.nlp, dat.note=dat.note,nm.phe=nm.phe, nm.ID=nm.ID, nm.utl=nm.utl)$MAP)
+	    score[filterpos] = as.vector(MAP(mat=mat, note=note)$scores)
 	    score
 	  })
+	  
+	  if (anyNA(prior)){
+	    stop('MAP output has NAs')
+	  }
 	  
 	  if (typeof(weight)=='character' & weight == 'beta'){
 	    weight <- t(sapply(1:knowndiseases, function(i){
@@ -125,6 +128,7 @@ sureLDA <- function(X,ICD,NLP,HU,filter,prior='PheNorm',weight='beta',nEmpty=20,
 	
 	weight[weight<0] <- 0
 	weight <- round(100*weight/mean(weight))
+	weight <- rbind(weight,matrix(alpha,nrow=nEmpty,ncol=W))
 	
 	if (!is.null(labeled)){
 		prior[!is.na(labeled)] = labeled[!is.na(labeled)]	
@@ -138,7 +142,6 @@ sureLDA <- function(X,ICD,NLP,HU,filter,prior='PheNorm',weight='beta',nEmpty=20,
 	  
 	  Add_probs = matrix(0,ncol=(D-knowndiseases),nrow=N)
 	  priorLDA = t(cbind(prior,Add_probs)) ##MAP_initial_probs is a matrix of N rows, 10
-	  weight = rbind(weight,matrix(alpha,nrow=nEmpty,ncol=W))
 	  
 	  xx=data.frame("V1"=rep(1:N,rep(W,N)),"variable"=rep(1:W,N),"value"=as.vector(t(as.matrix(X))))
 	  xx = xx[xx$value>0,]
@@ -164,16 +167,17 @@ sureLDA <- function(X,ICD,NLP,HU,filter,prior='PheNorm',weight='beta',nEmpty=20,
 	}
 	else{
 	  print("Inferring theta given provided phi")
+	  
 	  LDA_Ndk_predicted <- foreach(i=1:N, .combine=rbind) %dopar% {
 	    prior_i <- c(prior[i,],rep(0,nEmpty)); prior_i <- prior_i/sum(prior_i)
 	    post_i <- t(prior_i * phi); post_i <- post_i / rowSums(post_i)
-	    z_i <- c(t(post_i) %*% X[i,])
+	    z_i <- c((t(post_i)*weight) %*% X[i,])
 	    old <- rep(0,D)
 	    while (any(z_i-old >= 0.1)){
 	      old <- z_i
 	      prior_i <- c(prior[i,],rep(1,nEmpty)) + z_i; prior_i <- prior_i/sum(prior_i)
 	      post_i <- t(prior_i * phi); post_i <- post_i / rowSums(post_i)
-	      z_i <- c(t(post_i) %*% X[i,])
+	      z_i <- c((t(post_i)*weight) %*% X[i,])
 	    }
 	    z_i
 	  }

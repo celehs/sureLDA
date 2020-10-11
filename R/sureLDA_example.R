@@ -86,7 +86,7 @@ surelda_run_phenorm <- sureLDA(X,ICD,NLP,HU,filter)
 surelda_scores_phenorm <- surelda_run_phenorm$scores
 surelda_ensemble_phenorm <- surelda_run_phenorm$ensemble
 
-surelda_run_map <- sureLDA(X,ICD,NLP,HU,filter)
+surelda_run_map <- sureLDA(X,ICD,NLP,HU,filter,prior='MAP')
 surelda_scores_map <- surelda_run_phenorm$scores
 surelda_ensemble_map <- surelda_run_phenorm$ensemble
 
