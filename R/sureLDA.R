@@ -41,9 +41,6 @@ utils::globalVariables("it")
 logit <- function(x){log(x/(1-x))}
 expit <- function(x){1/(1+exp(-x))}
 
-<<<<<<< HEAD
-sureLDA <- function(X,ICD,NLP,HU,filter,prior='PheNorm',weight='beta',nEmpty=10,alpha=100,beta=100,burnin=50,ITER=150,phi=NULL,labeled=NULL){
-=======
 #' Surrogate-guided ensemble Latent Dirichlet Allocation
 #' 
 #' @param X nPatients x nFeatures matrix of feature counts
@@ -65,7 +62,6 @@ sureLDA <- function(X,ICD,NLP,HU,filter,prior='PheNorm',weight='beta',nEmpty=10,
 sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
                     nEmpty = 20, alpha = 100, beta = 100, burnin = 50, ITER = 150, 
                     phi = NULL, labeled = NULL) {
->>>>>>> ad478ab7ce85356bfadec253b2ed6688c01527e1
   knowndiseases = ncol(ICD)
   D = knowndiseases + nEmpty
   W = ncol(X)
@@ -181,17 +177,20 @@ sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
     
     res = foreach::foreach(it=1:3) %do% {
       print(paste('On iteration',it))
-      lda_rcpp(d,w,z,weight,priorLDA,alpha,beta,D,knowndiseases,burnin,ITER)[1:knowndiseases,]
+      lda_rcpp(d,w,z,weight,priorLDA,alpha,beta,D,knowndiseases,burnin,ITER)
     }
     
     print('Finishing Gibbs Sampling')
     
+    resSum = res[[1]] + res[[2]] + res[[3]]
     if (knowndiseases == 1){
-      LDA_Ndk_predicted = as.matrix(res[[1]] + res[[2]] + res[[3]]) / (3*alpha*ITER)
+      LDA_Ndk_predicted = as.matrix(resSum[1,1:N]) / (3*alpha*ITER)
     }
     else{
-      LDA_Ndk_predicted = t(res[[1]] + res[[2]] + res[[3]]) / (3*alpha*ITER)
+      LDA_Ndk_predicted = t(resSum[1:knowndiseases,1:N]) / (3*alpha*ITER)
     }
+    phi = resSum[,-c(1:N)]; phi = phi/rowSums(phi)
+
   }
   else{
     print("Inferring theta given provided phi")
@@ -230,6 +229,6 @@ sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
   
   
   return(list("scores"=LDA_Ndk_predicted, "probs"=posterior, "ensemble"=(prior+posterior)/2,
-              "prior"=prior, "weights"=weight[1:knowndiseases,]))
+              "prior"=prior, "phi"=phi, "weights"=weight[1:knowndiseases,]))
 }
 

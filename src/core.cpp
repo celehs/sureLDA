@@ -66,7 +66,7 @@ arma::umat lda_rcpp(arma::uvec d, arma::uvec w, arma::uvec z,
     arma::uvec ztot(T);
     ztot.zeros();
 
-    arma::umat res(T,D);
+    arma::umat res(T,D+W);
     res.zeros();
 
     double Z=0.0, U, currprob;
@@ -126,6 +126,9 @@ arma::umat lda_rcpp(arma::uvec d, arma::uvec w, arma::uvec z,
             for(t=0;t<T;t++){
                for(i=0;i<D;i++){
                    res(t,i) += dp(t,i);
+               }
+               for(i=0;i<W;i++){
+                   res(t,D+i) += wp(t,i);
                }
             }
             Rcout << "Iteration " << iter-burnin << "\n";
