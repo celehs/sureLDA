@@ -197,13 +197,13 @@ sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
     
     LDA_Ndk_predicted <- foreach::foreach(i=1:N, .combine=rbind) %dopar% {
       prior_i <- c(prior[i,],rep(0,nEmpty)); prior_i <- prior_i/sum(prior_i)
-      post_i <- t(prior_i * phi); post_i <- post_i / rowSums(post_i)
+      post_i <- t(prior_i * phi); post_i <- post_i / rowSums(post_i); post_i[is.na(post_i)] <- 0
       z_i <- c((t(post_i)*weight) %*% X[i,])
       old <- rep(0,D)
       while (any(z_i-old >= 0.1)){
         old <- z_i
         prior_i <- c(prior[i,],rep(1,nEmpty)) + z_i; prior_i <- prior_i/sum(prior_i)
-        post_i <- t(prior_i * phi); post_i <- post_i / rowSums(post_i)
+        post_i <- t(prior_i * phi); post_i <- post_i / rowSums(post_i); post_i[is.na(post_i)] <- 0
         z_i <- c((t(post_i)*weight) %*% X[i,])
       }
       z_i
