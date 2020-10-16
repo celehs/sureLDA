@@ -1,5 +1,5 @@
 ---
-title: "Example"
+title: "Simulated Example"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{example}
@@ -12,15 +12,15 @@ library(sureLDA)
 ```
 
 ```{r}
-str(simdata)
+surelda_run_phenorm <- with(simdata, sureLDA(X, ICD, NLP, HU, filter))
+surelda_scores_phenorm <- surelda_run_phenorm$scores
+surelda_ensemble_phenorm <- surelda_run_phenorm$ensemble
 ```
 
-```{r, eval=TRUE}
-set.seed(123)
-surelda_run <- with(simdata, sureLDA(X, weight, ICD, NLP, HU, filter))
-surelda_scores <- surelda_run$scores
-surelda_probs <- surelda_run$probs
-str(surelda_run)
+```{r, eval=FALSE}
+surelda_run_map <- with(simdata, sureLDA(X, ICD, NLP, HU, filter, prior = 'MAP'))
+surelda_scores_map <- surelda_run_phenorm$scores
+surelda_ensemble_map <- surelda_run_phenorm$ensemble
 ```
 
 ```{r}
