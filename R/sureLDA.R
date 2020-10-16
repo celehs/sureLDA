@@ -37,7 +37,7 @@ library(glmnet)
 logit <- function(x){log(x/(1-x))}
 expit <- function(x){exp(x)/(1+exp(x))}
 
-sureLDA <- function(X,ICD,NLP,HU,filter,prior='PheNorm',weight='beta',nEmpty=20,alpha=100,beta=100,burnin=50,ITER=150,phi=NULL,labeled=NULL){
+sureLDA <- function(X,ICD,NLP,HU,filter,prior='PheNorm',weight='beta',nEmpty=10,alpha=100,beta=100,burnin=50,ITER=150,phi=NULL,labeled=NULL){
   knowndiseases = ncol(ICD)
   D = knowndiseases + nEmpty
   W = ncol(X)
@@ -127,8 +127,8 @@ sureLDA <- function(X,ICD,NLP,HU,filter,prior='PheNorm',weight='beta',nEmpty=20,
   }
   
   weight[weight<0] <- 0
-  weight <- round(100*weight/mean(weight))
-  weight <- rbind(weight,matrix(alpha,nrow=nEmpty,ncol=W))
+  weight <- round(beta*weight/mean(weight))
+  weight <- rbind(weight,matrix(beta,nrow=nEmpty,ncol=W))
   
   if (!is.null(labeled)){
     prior[!is.na(labeled)] = labeled[!is.na(labeled)]	
