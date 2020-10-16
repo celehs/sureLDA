@@ -4,13 +4,25 @@
 \alias{sureLDA}
 \title{Surrogate-guided ensemble Latent Dirichlet Allocation}
 \usage{
-sureLDA(X, weight, ICD, NLP, HU, filter, nEmpty = 20, alpha = 1,
-  beta = 1, burnin = 50, ITER = 150)
+sureLDA(
+  X,
+  ICD,
+  NLP,
+  HU,
+  filter,
+  prior = "PheNorm",
+  weight = "beta",
+  nEmpty = 20,
+  alpha = 100,
+  beta = 100,
+  burnin = 50,
+  ITER = 150,
+  phi = NULL,
+  labeled = NULL
+)
 }
 \arguments{
 \item{X}{nPatients x nFeatures matrix of feature counts}
-
-\item{weight}{nPhenotypes x nFeatures matrix of phenotype-specific feature weights}
 
 \item{ICD}{nPatients x nPhenotypes matrix of main ICD surrogate counts}
 
@@ -19,6 +31,10 @@ sureLDA(X, weight, ICD, NLP, HU, filter, nEmpty = 20, alpha = 1,
 \item{HU}{nPatients-dimensional hospital utilization vector}
 
 \item{filter}{nPatients x nPhenotypes binary matrix indicating filter-positives}
+
+\item{prior}{'PheNorm', 'MAP', or nPatients x nPhenotypes matrix of prior probabilities}
+
+\item{weight}{'beta', 'uniform', or nPhenotypes x nFeatures matrix of feature weights}
 
 \item{nEmpty}{Number of 'empty' topics to include in LDA step}
 
@@ -29,9 +45,10 @@ sureLDA(X, weight, ICD, NLP, HU, filter, nEmpty = 20, alpha = 1,
 \item{burnin}{number of burnin Gibbs iterations}
 
 \item{ITER}{number of subsequent iterations for inference}
-}
-\value{
-scores = nPatients x nPhenotypes matrix of sureLDA phenotype scores; probs = nPatients x nPhenotypes matrix of posterior probabilities (post-clustering of sureLDA scores)
+
+\item{phi}{...}
+
+\item{labeled}{(optional) = NA when missing, non-NA for observed}
 }
 \description{
 Surrogate-guided ensemble Latent Dirichlet Allocation

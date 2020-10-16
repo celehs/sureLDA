@@ -1,15 +1,19 @@
+`%do%` <- foreach::`%do%`
+`%dopar%` <- foreach::`%dopar%`
+utils::globalVariables("it")
+
 # sureLDA.R: Contains sureLDA function. See Ahuja et al. (2020), JAMIA for details.
 # Author: Yuri Ahuja
 # Last Updated: 9/12/2020
 
-library(Rcpp)
-library(RcppArmadillo)
-require(Matrix)
-require(flexmix)
-require(stats)
-library(foreach)
-library(doParallel)
-library(glmnet)
+# library(Rcpp)
+# library(RcppArmadillo)
+# require(Matrix)
+# require(flexmix)
+# require(stats)
+# library(foreach)
+# library(doParallel)
+# library(glmnet)
 
 # source("../sureLDA/PheNorm.R")
 # source("../sureLDA/MAP.R")
@@ -35,9 +39,33 @@ library(glmnet)
 # probs = nPatients x nPhenotypes matrix of posterior probabilities (post-clustering of sureLDA scores)
 
 logit <- function(x){log(x/(1-x))}
-expit <- function(x){exp(x)/(1+exp(x))}
+expit <- function(x){1/(1+exp(-x))}
 
+<<<<<<< HEAD
 sureLDA <- function(X,ICD,NLP,HU,filter,prior='PheNorm',weight='beta',nEmpty=10,alpha=100,beta=100,burnin=50,ITER=150,phi=NULL,labeled=NULL){
+=======
+#' Surrogate-guided ensemble Latent Dirichlet Allocation
+#' 
+#' @param X nPatients x nFeatures matrix of feature counts
+#' @param ICD nPatients x nPhenotypes matrix of main ICD surrogate counts
+#' @param NLP nPatients x nPhenotypes matrix of main NLP surrogate counts
+#' @param HU nPatients-dimensional hospital utilization vector
+#' @param filter nPatients x nPhenotypes binary matrix indicating filter-positives
+#' @param prior 'PheNorm', 'MAP', or nPatients x nPhenotypes matrix of prior probabilities
+#' @param weight 'beta', 'uniform', or nPhenotypes x nFeatures matrix of feature weights
+#' @param nEmpty Number of 'empty' topics to include in LDA step
+#' @param alpha LDA hyperparameters
+#' @param beta LDA hyperparameters
+#' @param burnin number of burnin Gibbs iterations 
+#' @param ITER number of subsequent iterations for inference
+#' @param phi ...
+#' @param labeled (optional) = NA when missing, non-NA for observed
+#' 
+#' @export
+sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
+                    nEmpty = 20, alpha = 100, beta = 100, burnin = 50, ITER = 150, 
+                    phi = NULL, labeled = NULL) {
+>>>>>>> ad478ab7ce85356bfadec253b2ed6688c01527e1
   knowndiseases = ncol(ICD)
   D = knowndiseases + nEmpty
   W = ncol(X)
@@ -96,7 +124,7 @@ sureLDA <- function(X,ICD,NLP,HU,filter,prior='PheNorm',weight='beta',nEmpty=10,
       note = Matrix(HU[filterpos], sparse=TRUE)
       
       score = rep(0,N)
-      score[filterpos] = as.vector(MAP(mat=mat, note=note)$scores)
+      score[filterpos] = as.vector(MAP::MAP(mat=mat, note=note)$scores)
       score
     })
     
@@ -116,7 +144,7 @@ sureLDA <- function(X,ICD,NLP,HU,filter,prior='PheNorm',weight='beta',nEmpty=10,
         logit_prior <- logit(prior_bounded)
         reg.weights <- prior_bounded * (1-prior_bounded)
         
-        coef(glmnet(SX.norm.corrupt,logit_prior,weights=reg.weights,intercept=FALSE), s=0)[-1]
+        glmnet::coef.glmnet(glmnet::glmnet(SX.norm.corrupt,logit_prior,weights=reg.weights,intercept=FALSE), s=0)[-1]
       }))
     }
     print("Finishing MAP")
@@ -151,7 +179,7 @@ sureLDA <- function(X,ICD,NLP,HU,filter,prior='PheNorm',weight='beta',nEmpty=10,
     
     print('Starting Gibbs Sampling')
     
-    res = foreach(it=1:3) %do% {
+    res = foreach::foreach(it=1:3) %do% {
       print(paste('On iteration',it))
       lda_rcpp(d,w,z,weight,priorLDA,alpha,beta,D,knowndiseases,burnin,ITER)[1:knowndiseases,]
     }
@@ -168,7 +196,7 @@ sureLDA <- function(X,ICD,NLP,HU,filter,prior='PheNorm',weight='beta',nEmpty=10,
   else{
     print("Inferring theta given provided phi")
     
-    LDA_Ndk_predicted <- foreach(i=1:N, .combine=rbind) %dopar% {
+    LDA_Ndk_predicted <- foreach::foreach(i=1:N, .combine=rbind) %dopar% {
       prior_i <- c(prior[i,],rep(0,nEmpty)); prior_i <- prior_i/sum(prior_i)
       post_i <- t(prior_i * phi); post_i <- post_i / rowSums(post_i)
       z_i <- c((t(post_i)*weight) %*% X[i,])

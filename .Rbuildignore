@@ -1,6 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-sim/
+data-raw/
 docs/
 pkgdown/
-
+_vignettes/
