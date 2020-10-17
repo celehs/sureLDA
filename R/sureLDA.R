@@ -34,10 +34,6 @@ utils::globalVariables("it")
 # weight = 'beta', 'uniform', or nPhenotypes x nFeatures matrix of feature weights
 # labels (optional) = NA when missing, non-NA for observed
 
-# OUTPUT:
-# scores = nPatients x nPhenotypes matrix of sureLDA phenotype scores
-# probs = nPatients x nPhenotypes matrix of posterior probabilities (post-clustering of sureLDA scores)
-
 logit <- function(x){log(x/(1-x))}
 expit <- function(x){1/(1+exp(-x))}
 
@@ -57,6 +53,13 @@ expit <- function(x){1/(1+exp(-x))}
 #' @param ITER number of subsequent iterations for inference (defaults to 150)
 #' @param phi (optional) nPhenotypes x nFeatures pre-trained topic-feature distribution matrix
 #' @param labeled (optional) nPatients x nPhenotypes matrix of a priori labels (set missing entries to NA)
+#' 
+#' @return scores nPatients x nPhenotypes matrix of weighted patient-phenotype assignment counts from LDA step
+#' @return probs nPatients x nPhenotypes matrix of patient-phenotype posterior probabilities
+#' @return ensemble Mean of sureLDA posterior and PheNorm/MAP prior
+#' @return prior nPatients x nPhenotypes matrix of PheNorm/MAP phenotype probability estimates
+#' @return phi nPhenotypes x nFeatures topic distribution matrix from LDA step
+#' @return weights nPhenotypes x nFeatures matrix of topic-feature weights
 #' 
 #' @export
 sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
