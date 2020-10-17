@@ -22,33 +22,33 @@ sureLDA(
 )
 }
 \arguments{
-\item{X}{nPatients x nFeatures matrix of feature counts}
+\item{X}{nPatients x nFeatures matrix of EHR feature counts}
 
 \item{ICD}{nPatients x nPhenotypes matrix of main ICD surrogate counts}
 
 \item{NLP}{nPatients x nPhenotypes matrix of main NLP surrogate counts}
 
-\item{HU}{nPatients-dimensional hospital utilization vector}
+\item{HU}{nPatients-dimensional vector containing the healthcare utilization feature}
 
 \item{filter}{nPatients x nPhenotypes binary matrix indicating filter-positives}
 
-\item{prior}{'PheNorm', 'MAP', or nPatients x nPhenotypes matrix of prior probabilities}
+\item{prior}{'PheNorm', 'MAP', or nPatients x nPhenotypes matrix of prior probabilities (defaults to PheNorm)}
 
-\item{weight}{'beta', 'uniform', or nPhenotypes x nFeatures matrix of feature weights}
+\item{weight}{'beta', 'uniform', or nPhenotypes x nFeatures matrix of feature weights (defaults to beta)}
 
-\item{nEmpty}{Number of 'empty' topics to include in LDA step}
+\item{nEmpty}{Number of 'empty' topics to include in LDA step (defaults to 10)}
 
-\item{alpha}{LDA hyperparameters}
+\item{alpha}{LDA Dirichlet hyperparameter for patient-topic distribution (defaults to 100)}
 
-\item{beta}{LDA hyperparameters}
+\item{beta}{LDA Dirichlet hyperparameter for topic-feature distribution (defaults to 100)}
 
-\item{burnin}{number of burnin Gibbs iterations}
+\item{burnin}{number of burnin Gibbs iterations (defaults to 50)}
 
-\item{ITER}{number of subsequent iterations for inference}
+\item{ITER}{number of subsequent iterations for inference (defaults to 150)}
 
-\item{phi}{...}
+\item{phi}{(optional) nPhenotypes x nFeatures pre-trained topic-feature distribution matrix}
 
-\item{labeled}{(optional) = NA when missing, non-NA for observed}
+\item{labeled}{(optional) nPatients x nPhenotypes matrix of a priori labels (set missing entries to NA)}
 }
 \description{
 Surrogate-guided ensemble Latent Dirichlet Allocation

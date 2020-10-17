@@ -9,12 +9,36 @@ vignette: >
 
 ```{r setup}
 library(sureLDA)
+library(pROC)
 ```
 
 ```{r}
-surelda_run_phenorm <- with(simdata, sureLDA(X, ICD, NLP, HU, filter))
-surelda_scores_phenorm <- surelda_run_phenorm$scores
-surelda_ensemble_phenorm <- surelda_run_phenorm$ensemble
+print('Evaluating sureLDA on simulated dataset')
+surelda_run_phenorm <- with(simdata, sureLDA(X, ICD, NLP, HU, filter, nEmpty=10))
+surelda_scores_phenorm_aucs <- sapply(1:ncol(filter),function(k){
+  auc(Y[,k],surelda_run_phenorm$scores[,k])
+})
+surelda_ensemble_phenorm_aucs <- sapply(1:ncol(filter),function(k){
+  auc(Y[,k],surelda_run_phenorm$ensemble[,k])
+})
+surelda_result_combined <- rbind(surelda_scores_phenorm_aucs,surelda_ensemble_phenorm_aucs)
+rownames(surelda_result_combined) <- c('sureLDA Scores','sureLDA Probs')
+print(surelda_result_combined)
+```
+
+```{r}
+print('Evaluating sureLDA prediction given phi trained from previous run')
+surelda_prediction <- sureLDA(X,ICD,NLP,HU,filter,prior=surelda_run_phenorm$prior,nEmpty=10,
+                              weight=surelda_run_phenorm$weight,phi=surelda_run_phenorm$phi)
+surelda_scores_prediction_aucs <- sapply(1:ncol(filter),function(k){
+  auc(Y[,k],surelda_prediction$scores[,k])
+})
+surelda_ensemble_prediction_aucs <- sapply(1:ncol(filter),function(k){
+  auc(Y[,k],surelda_prediction$ensemble[,k])
+})
+surelda_prediction_result_combined <- rbind(surelda_scores_prediction_aucs,surelda_ensemble_prediction_aucs)
+rownames(surelda_prediction_result_combined) <- c('sureLDA Scores','sureLDA Probs')
+print(surelda_prediction_result_combined)
 ```
 
 ```{r, eval=FALSE}

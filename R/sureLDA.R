@@ -43,20 +43,20 @@ expit <- function(x){1/(1+exp(-x))}
 
 #' Surrogate-guided ensemble Latent Dirichlet Allocation
 #' 
-#' @param X nPatients x nFeatures matrix of feature counts
+#' @param X nPatients x nFeatures matrix of EHR feature counts
 #' @param ICD nPatients x nPhenotypes matrix of main ICD surrogate counts
 #' @param NLP nPatients x nPhenotypes matrix of main NLP surrogate counts
-#' @param HU nPatients-dimensional hospital utilization vector
+#' @param HU nPatients-dimensional vector containing the healthcare utilization feature
 #' @param filter nPatients x nPhenotypes binary matrix indicating filter-positives
-#' @param prior 'PheNorm', 'MAP', or nPatients x nPhenotypes matrix of prior probabilities
-#' @param weight 'beta', 'uniform', or nPhenotypes x nFeatures matrix of feature weights
-#' @param nEmpty Number of 'empty' topics to include in LDA step
-#' @param alpha LDA hyperparameters
-#' @param beta LDA hyperparameters
-#' @param burnin number of burnin Gibbs iterations 
-#' @param ITER number of subsequent iterations for inference
-#' @param phi ...
-#' @param labeled (optional) = NA when missing, non-NA for observed
+#' @param prior 'PheNorm', 'MAP', or nPatients x nPhenotypes matrix of prior probabilities (defaults to PheNorm)
+#' @param weight 'beta', 'uniform', or nPhenotypes x nFeatures matrix of feature weights (defaults to beta)
+#' @param nEmpty Number of 'empty' topics to include in LDA step (defaults to 10)
+#' @param alpha LDA Dirichlet hyperparameter for patient-topic distribution (defaults to 100)
+#' @param beta LDA Dirichlet hyperparameter for topic-feature distribution (defaults to 100)
+#' @param burnin number of burnin Gibbs iterations (defaults to 50)
+#' @param ITER number of subsequent iterations for inference (defaults to 150)
+#' @param phi (optional) nPhenotypes x nFeatures pre-trained topic-feature distribution matrix
+#' @param labeled (optional) nPatients x nPhenotypes matrix of a priori labels (set missing entries to NA)
 #' 
 #' @export
 sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
