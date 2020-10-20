@@ -200,10 +200,10 @@ sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
     print("Inferring theta given provided phi")
     
     if (nCores == 1){
-      LDA_Ndk_predicted <- lda_pred_rcpp(weight=weight,X=X,prior=prior,phi=phi)
+      LDA_Ndk_predicted <- lda_pred_rcpp(weight=weight,X=X,prior=prior,phi=phi+1e-10)
     }
     else{
-      LDA_Ndk_predicted <- lda_pred_rcpp(weight=weight,X=X,prior=prior,phi=phi)
+      LDA_Ndk_predicted <- lda_pred_rcpp(weight=weight,X=X,prior=prior,phi=phi+1e-10)
       # LDA_Ndk_predicted = lda_pred_rcpp_MP(weight=weight,X=X,prior=prior,phi=phi,mcores=nCores)
     }
   }
