@@ -12,10 +12,13 @@ library(sureLDA)
 library(pROC)
 ```
 
+Let N denote the number of patients, W the number of EHR features, and K the number of target phenotypes to be predicted. Our input data consists of 1) X, an NxW matrix of EHR feature counts, 2) ICD, an NxK matrix of key ICD code counts for each target phenotype, 3) NLP, an NxK matrix of key NLP feature counts for each target phenotype, 4) HU, an N-dimensional vector of healthcare utilization measurements (i.e. total patient encounters in a patient's chart), and 5) an NxK matrix of filter indicators for each target phenotype (we assume P(phenotype | filter=0) = 0).
+
+First, we evaluate sureLDA with a PheNorm-generated prior (default) for prediction of 10 target phenotypes using a simulated dataset. We employ 10 'empty' topics (this should generally be set in the range of 10-100).
+
 ```{r}
-print('Fitting sureLDA with PheNorm (default) prior and 10 target phenotypes on simulated dataset')
 surelda_run_phenorm <- with(simdata, sureLDA(X, ICD, NLP, HU, filter, nEmpty=10))
-print('Evaluating AUCs of scores across 10 phenotypes')
+print('Evaluating AUCs of sureLDA scores across 10 phenotypes')
 surelda_scores_phenorm_aucs <- sapply(1:ncol(filter),function(k){
   auc(Y[,k],surelda_run_phenorm$scores[,k])
 })
@@ -29,11 +32,12 @@ print("AUCs:")
 print(surelda_result_combined)
 ```
 
+Next, we evaluate sureLDA's predictions of the same 10 target phenotypes using the same data but given the prior and phi estimators from the previous run.
+
 ```{r}
-print('Fitting sureLDA with 10 target phenotypes given prior and phi trained from previous run')
 surelda_prediction <- sureLDA(X,ICD,NLP,HU,filter,prior=surelda_run_phenorm$prior,nEmpty=10,
                               weight=surelda_run_phenorm$weight,phi=surelda_run_phenorm$phi)
-print('Evaluating AUCs of scores across 10 phenotypes')
+print('Evaluating AUCs of sureLDA scores across 10 phenotypes')
 surelda_scores_prediction_aucs <- sapply(1:ncol(filter),function(k){
   auc(Y[,k],surelda_prediction$scores[,k])
 })
@@ -52,6 +56,8 @@ surelda_run_map <- with(simdata, sureLDA(X, ICD, NLP, HU, filter, prior = 'MAP')
 surelda_scores_map <- surelda_run_phenorm$scores
 surelda_ensemble_map <- surelda_run_phenorm$ensemble
 ```
+
+Total time spent:
 
 ```{r}
 proc.time()
