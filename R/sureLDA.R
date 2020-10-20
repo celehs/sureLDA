@@ -203,7 +203,8 @@ sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
       LDA_Ndk_predicted <- lda_pred_rcpp(weight=weight,X=X,prior=prior,phi=phi)
     }
     else{
-      LDA_Ndk_predicted = lda_pred_rcpp_MP(weight=weight,X=X,prior=prior,phi=phi,mcores=nCores)
+      LDA_Ndk_predicted <- lda_pred_rcpp(weight=weight,X=X,prior=prior,phi=phi)
+      # LDA_Ndk_predicted = lda_pred_rcpp_MP(weight=weight,X=X,prior=prior,phi=phi,mcores=nCores)
     }
   }
   

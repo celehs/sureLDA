@@ -5,3 +5,7 @@ lda_rcpp <- function(d, w, z, weight, prior, alpha, beta, T, knowndiseases, burn
     .Call('_sureLDA_lda_rcpp', PACKAGE = 'sureLDA', d, w, z, weight, prior, alpha, beta, T, knowndiseases, burnin, ITER)
 }
 
+lda_pred_rcpp <- function(weight, X, prior, phi, err = 0.1) {
+    .Call('_sureLDA_lda_pred_rcpp', PACKAGE = 'sureLDA', weight, X, prior, phi, err)
+}
+

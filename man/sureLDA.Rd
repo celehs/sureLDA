@@ -18,6 +18,7 @@ sureLDA(
   burnin = 50,
   ITER = 150,
   phi = NULL,
+  nCores = 1,
   labeled = NULL
 )
 }
@@ -48,7 +49,22 @@ sureLDA(
 
 \item{phi}{(optional) nPhenotypes x nFeatures pre-trained topic-feature distribution matrix}
 
+\item{nCores}{(optional) Number of parallel cores to use only if phi is provided (defaults to 1)}
+
 \item{labeled}{(optional) nPatients x nPhenotypes matrix of a priori labels (set missing entries to NA)}
+}
+\value{
+scores nPatients x nPhenotypes matrix of weighted patient-phenotype assignment counts from LDA step
+
+probs nPatients x nPhenotypes matrix of patient-phenotype posterior probabilities
+
+ensemble Mean of sureLDA posterior and PheNorm/MAP prior
+
+prior nPatients x nPhenotypes matrix of PheNorm/MAP phenotype probability estimates
+
+phi nPhenotypes x nFeatures topic distribution matrix from LDA step
+
+weights nPhenotypes x nFeatures matrix of topic-feature weights
 }
 \description{
 Surrogate-guided ensemble Latent Dirichlet Allocation

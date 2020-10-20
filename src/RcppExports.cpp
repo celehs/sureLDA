@@ -27,9 +27,25 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// lda_pred_rcpp
+arma::mat lda_pred_rcpp(arma::mat weight, arma::mat X, arma::mat prior, arma::mat phi, double err);
+RcppExport SEXP _sureLDA_lda_pred_rcpp(SEXP weightSEXP, SEXP XSEXP, SEXP priorSEXP, SEXP phiSEXP, SEXP errSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type X(XSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type prior(priorSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type phi(phiSEXP);
+    Rcpp::traits::input_parameter< double >::type err(errSEXP);
+    rcpp_result_gen = Rcpp::wrap(lda_pred_rcpp(weight, X, prior, phi, err));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_sureLDA_lda_rcpp", (DL_FUNC) &_sureLDA_lda_rcpp, 11},
+    {"_sureLDA_lda_pred_rcpp", (DL_FUNC) &_sureLDA_lda_pred_rcpp, 5},
     {NULL, NULL, 0}
 };
 
