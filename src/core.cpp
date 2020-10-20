@@ -1,11 +1,12 @@
 #include <RcppArmadillo.h>
 #include <Rcpp.h>
 #include <math.h>
+#include <omp.h>
 //#include <RcppArmadilloExtensions/sample.h>
 using namespace Rcpp;
 using namespace RcppArmadillo;
 // [[Rcpp::depends("RcppArmadillo")]]
-
+// [[Rcpp::plugins(openmp)]]
 
 void init_lda_v2(arma::umat& wp, arma::umat& dp, arma::uvec& ztot,
                  arma::umat weight, arma::mat& prior, arma::uvec d,
@@ -139,4 +140,78 @@ arma::umat lda_rcpp(arma::uvec d, arma::uvec w, arma::uvec z,
     }
     
     return res;    
+}
+
+
+// [[Rcpp::export]]
+arma::mat lda_pred_rcpp(arma::mat weight, arma::mat X, 
+                        arma::mat prior, arma::mat phi, double err=0.1){
+    unsigned int N = prior.n_rows;
+    unsigned int knowndiseases =prior.n_cols;
+    unsigned int D = phi.n_rows;
+    arma::mat pred_mat(N,D,arma::fill::zeros);
+    arma::mat post_i =  phi;
+    
+    for(unsigned int i=0; i<N; i++){
+        arma::vec prior_i(D,arma::fill::zeros);
+        prior_i.subvec(0,knowndiseases-1) = prior.row(i).t();
+        prior_i /= arma::accu(prior_i);
+        post_i = phi.each_col()%prior_i;
+        post_i.each_row() /= arma::sum(post_i);
+        arma::vec z_i = (post_i%weight)*X.row(i).t();
+        arma::vec old(D, arma::fill::zeros);
+        while(arma::any(arma::abs(z_i-old) >=err) ){
+            old = z_i;
+            prior_i.fill(1.0);
+            prior_i.subvec(0,knowndiseases-1) = prior.row(i).t();
+            prior_i += z_i;
+            prior_i /= arma::accu(prior_i);
+            post_i = phi.each_col()%prior_i;
+            post_i.each_row() /= arma::sum(post_i);
+            z_i = (post_i%weight)*X.row(i).t();
+        }
+        
+        pred_mat.row(i)= z_i.t();
+    }
+    
+    return pred_mat;
+}
+
+
+// [[Rcpp::export]]
+arma::mat lda_pred_rcpp_MP(arma::mat weight, arma::mat X, 
+                           arma::mat prior, arma::mat phi, 
+                           unsigned int mcores=3, double err=0.1){
+    
+    omp_set_num_threads(mcores);
+    unsigned int N = prior.n_rows;
+    unsigned int knowndiseases =prior.n_cols;
+    unsigned int D = phi.n_rows;
+    arma::mat pred_mat(D,N, arma::fill::zeros);
+    //arma::mat post_i =  phi;
+    
+#pragma omp parallel for schedule(static)
+    for(unsigned int i=0; i<N; i++){
+        arma::vec prior_i(D,arma::fill::zeros);
+        prior_i.subvec(0,knowndiseases-1) = prior.row(i).t();
+        prior_i /= arma::accu(prior_i);
+        arma::mat post_i = phi.each_col()%prior_i;
+        post_i.each_row() /= arma::sum(post_i);
+        arma::vec z_i = (post_i%weight)*X.row(i).t();
+        arma::vec old(D, arma::fill::zeros);
+        while(arma::any(arma::abs(z_i-old) >=err) ){
+            old = z_i;
+            prior_i.fill(1.0);
+            prior_i.subvec(0,knowndiseases-1) = prior.row(i).t();
+            prior_i += z_i;
+            prior_i /= arma::accu(prior_i);
+            post_i = phi.each_col()%prior_i;
+            post_i.each_row() /= arma::sum(post_i);
+            z_i = (post_i%weight)*X.row(i).t();
+        }
+        
+        pred_mat.col(i)= z_i;
+    }
+    
+    return pred_mat.t();
 }
