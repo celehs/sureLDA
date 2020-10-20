@@ -52,6 +52,7 @@ expit <- function(x){1/(1+exp(-x))}
 #' @param burnin number of burnin Gibbs iterations (defaults to 50)
 #' @param ITER number of subsequent iterations for inference (defaults to 150)
 #' @param phi (optional) nPhenotypes x nFeatures pre-trained topic-feature distribution matrix
+#' @param nCores (optional) Number of parallel cores to use only if phi is provided (defaults to 1)
 #' @param labeled (optional) nPatients x nPhenotypes matrix of a priori labels (set missing entries to NA)
 #' 
 #' @return scores nPatients x nPhenotypes matrix of weighted patient-phenotype assignment counts from LDA step
@@ -64,7 +65,7 @@ expit <- function(x){1/(1+exp(-x))}
 #' @export
 sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
                     nEmpty = 20, alpha = 100, beta = 100, burnin = 50, ITER = 150, 
-                    phi = NULL, labeled = NULL) {
+                    phi = NULL, nCores=1, labeled = NULL) {
   knowndiseases = ncol(ICD)
   D = knowndiseases + nEmpty
   W = ncol(X)
@@ -198,18 +199,11 @@ sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
   else{
     print("Inferring theta given provided phi")
     
-    LDA_Ndk_predicted <- foreach::foreach(i=1:N, .combine=rbind) %dopar% {
-      prior_i <- c(prior[i,],rep(0,nEmpty)); prior_i <- prior_i/sum(prior_i)
-      post_i <- t(prior_i * phi); post_i <- post_i / rowSums(post_i); post_i[is.na(post_i)] <- 0
-      z_i <- c((t(post_i)*weight) %*% X[i,])
-      old <- rep(0,D)
-      while (any(z_i-old >= 0.1)){
-        old <- z_i
-        prior_i <- c(prior[i,],rep(1,nEmpty)) + z_i; prior_i <- prior_i/sum(prior_i)
-        post_i <- t(prior_i * phi); post_i <- post_i / rowSums(post_i); post_i[is.na(post_i)] <- 0
-        z_i <- c((t(post_i)*weight) %*% X[i,])
-      }
-      z_i
+    if (nCores == 1){
+      LDA_Ndk_predicted <- lda_pred_rcpp(weight=weight,X=X,prior=prior,phi=phi)
+    }
+    else{
+      LDA_Ndk_predicted = lda_pred_rcpp_MP(weight=weight,X=X,prior=prior,phi=phi,mcores=nCores)
     }
   }
   
