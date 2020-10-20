@@ -13,31 +13,37 @@ library(pROC)
 ```
 
 ```{r}
-print('Evaluating sureLDA on simulated dataset')
+print('Fitting sureLDA with PheNorm prior on simulated dataset with 10 phenotypes')
 surelda_run_phenorm <- with(simdata, sureLDA(X, ICD, NLP, HU, filter, nEmpty=10))
+print('Evaluating AUCs of scores across 10 phenotypes')
 surelda_scores_phenorm_aucs <- sapply(1:ncol(filter),function(k){
   auc(Y[,k],surelda_run_phenorm$scores[,k])
 })
+print('Evaluating AUCs of predicted probabilities across 10 phenotypes')
 surelda_ensemble_phenorm_aucs <- sapply(1:ncol(filter),function(k){
   auc(Y[,k],surelda_run_phenorm$ensemble[,k])
 })
 surelda_result_combined <- rbind(surelda_scores_phenorm_aucs,surelda_ensemble_phenorm_aucs)
 rownames(surelda_result_combined) <- c('sureLDA Scores','sureLDA Probs')
+print("AUCs:")
 print(surelda_result_combined)
 ```
 
 ```{r}
-print('Evaluating sureLDA prediction given phi trained from previous run')
+print('Fitting sureLDA given PheNorm prior and phi trained from previous run')
 surelda_prediction <- sureLDA(X,ICD,NLP,HU,filter,prior=surelda_run_phenorm$prior,nEmpty=10,
                               weight=surelda_run_phenorm$weight,phi=surelda_run_phenorm$phi)
+print('Evaluating AUCs of scores across 10 phenotypes')
 surelda_scores_prediction_aucs <- sapply(1:ncol(filter),function(k){
   auc(Y[,k],surelda_prediction$scores[,k])
 })
+print('Evaluating AUCs of predicted probabilities across 10 phenotypes')
 surelda_ensemble_prediction_aucs <- sapply(1:ncol(filter),function(k){
   auc(Y[,k],surelda_prediction$ensemble[,k])
 })
 surelda_prediction_result_combined <- rbind(surelda_scores_prediction_aucs,surelda_ensemble_prediction_aucs)
 rownames(surelda_prediction_result_combined) <- c('sureLDA Scores','sureLDA Probs')
+print("AUCs:")
 print(surelda_prediction_result_combined)
 ```
 
