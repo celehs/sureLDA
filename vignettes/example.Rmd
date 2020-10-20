@@ -13,7 +13,7 @@ library(pROC)
 ```
 
 ```{r}
-print('Fitting sureLDA with PheNorm prior on simulated dataset with 10 phenotypes')
+print('Fitting sureLDA with PheNorm (default) prior and 10 target phenotypes on simulated dataset')
 surelda_run_phenorm <- with(simdata, sureLDA(X, ICD, NLP, HU, filter, nEmpty=10))
 print('Evaluating AUCs of scores across 10 phenotypes')
 surelda_scores_phenorm_aucs <- sapply(1:ncol(filter),function(k){
@@ -30,7 +30,7 @@ print(surelda_result_combined)
 ```
 
 ```{r}
-print('Fitting sureLDA given PheNorm prior and phi trained from previous run')
+print('Fitting sureLDA with 10 target phenotypes given prior and phi trained from previous run')
 surelda_prediction <- sureLDA(X,ICD,NLP,HU,filter,prior=surelda_run_phenorm$prior,nEmpty=10,
                               weight=surelda_run_phenorm$weight,phi=surelda_run_phenorm$phi)
 print('Evaluating AUCs of scores across 10 phenotypes')
