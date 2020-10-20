@@ -157,22 +157,25 @@ arma::mat lda_pred_rcpp(arma::mat weight, arma::mat X,
         prior_i.subvec(0,knowndiseases-1) = prior.row(i).t();
         if (arma::accu(prior_i) > 0){
             prior_i /= arma::accu(prior_i);
-        }
-        post_i = phi.each_col()%prior_i;
-        post_i.each_row() /= arma::sum(post_i);
-        arma::vec z_i = (post_i%weight)*X.row(i).t();
-        arma::vec old(D, arma::fill::zeros);
-        while(arma::any(arma::abs(z_i-old) >=err) ){
-            old = z_i;
-            prior_i.fill(1.0);
-            prior_i.subvec(0,knowndiseases-1) = prior.row(i).t();
-            prior_i += z_i;
-            prior_i /= arma::accu(prior_i);
             post_i = phi.each_col()%prior_i;
             post_i.each_row() /= arma::sum(post_i);
-            z_i = (post_i%weight)*X.row(i).t();
+            arma::vec z_i = (post_i%weight)*X.row(i).t();
+            arma::vec old(D, arma::fill::zeros);
+            while(arma::any(arma::abs(z_i-old) >=err) ){
+                old = z_i;
+                prior_i.fill(1.0);
+                prior_i.subvec(0,knowndiseases-1) = prior.row(i).t();
+                prior_i += z_i;
+                prior_i /= arma::accu(prior_i);
+                post_i = phi.each_col()%prior_i;
+                post_i.each_row() /= arma::sum(post_i);
+                z_i = (post_i%weight)*X.row(i).t();
+            }
         }
-        
+        else{
+            arma::vec z_i(D, arma::fill::zeros);
+        }
+
         pred_mat.row(i)= z_i.t();
     }
     
