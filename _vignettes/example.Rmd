@@ -31,8 +31,8 @@ surelda_scores_phenorm_aucs <- sapply(1:ncol(simdata$filter),function(k){
 Evaluating AUCs of predicted probabilities across 10 phenotypes
 
 ```{r}
-surelda_ensemble_phenorm_aucs <- sapply(1:ncol(filter),function(k){
-  auc(Y[,k],surelda_run_phenorm$ensemble[,k])
+surelda_ensemble_phenorm_aucs <- sapply(1:ncol(simdata$filter),function(k){
+  auc(simdata$Y[,k],surelda_run_phenorm$ensemble[,k])
 })
 ```
 
@@ -55,16 +55,16 @@ surelda_prediction <- with(simdata,
 Evaluating AUCs of sureLDA scores across 10 phenotypes
 
 ```{r}
-surelda_scores_prediction_aucs <- sapply(1:ncol(filter),function(k){
-  auc(Y[,k],surelda_prediction$scores[,k])
+surelda_scores_prediction_aucs <- sapply(1:ncol(simdata$filter),function(k){
+  auc(simdata$Y[,k],surelda_prediction$scores[,k])
 })
 ```
 
 Evaluating AUCs of predicted probabilities across 10 phenotypes
 
 ```{r}
-surelda_ensemble_prediction_aucs <- sapply(1:ncol(filter),function(k){
-  auc(Y[,k],surelda_prediction$ensemble[,k])
+surelda_ensemble_prediction_aucs <- sapply(1:ncol(simdata$filter),function(k){
+  auc(simdata$Y[,k],surelda_prediction$ensemble[,k])
 })
 ```
 
