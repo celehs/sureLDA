@@ -171,12 +171,11 @@ arma::mat lda_pred_rcpp(arma::mat weight, arma::mat X,
                 post_i.each_row() /= arma::sum(post_i);
                 z_i = (post_i%weight)*X.row(i).t();
             }
+            pred_mat.row(i)= z_i.t();
         }
         else{
-            arma::vec z_i(D, arma::fill::zeros);
+            pred_mat.row(i).zeros();
         }
-
-        pred_mat.row(i)= z_i.t();
     }
     
     return pred_mat;
