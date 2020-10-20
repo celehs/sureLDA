@@ -34,9 +34,13 @@ Evaluating AUCs of predicted probabilities across 10 phenotypes
 surelda_ensemble_phenorm_aucs <- sapply(1:ncol(filter),function(k){
   auc(Y[,k],surelda_run_phenorm$ensemble[,k])
 })
+```
+
+AUCs:
+
+```{r}
 surelda_result_combined <- rbind(surelda_scores_phenorm_aucs,surelda_ensemble_phenorm_aucs)
 rownames(surelda_result_combined) <- c('sureLDA Scores','sureLDA Probs')
-print("AUCs:")
 print(surelda_result_combined)
 ```
 
@@ -46,17 +50,29 @@ Next, we evaluate sureLDA's predictions of the same 10 target phenotypes using t
 surelda_prediction <- with(simdata,
                         sureLDA(X, ICD, NLP, HU, filter, prior = surelda_run_phenorm$prior, nEmpty = 10,
                               weight = surelda_run_phenorm$weight, phi = surelda_run_phenorm$phi))
-print('Evaluating AUCs of sureLDA scores across 10 phenotypes')
+```
+
+Evaluating AUCs of sureLDA scores across 10 phenotypes
+
+```{r}
 surelda_scores_prediction_aucs <- sapply(1:ncol(filter),function(k){
   auc(Y[,k],surelda_prediction$scores[,k])
 })
-print('Evaluating AUCs of predicted probabilities across 10 phenotypes')
+```
+
+Evaluating AUCs of predicted probabilities across 10 phenotypes
+
+```{r}
 surelda_ensemble_prediction_aucs <- sapply(1:ncol(filter),function(k){
   auc(Y[,k],surelda_prediction$ensemble[,k])
 })
+```
+
+AUCs:
+
+```{r}
 surelda_prediction_result_combined <- rbind(surelda_scores_prediction_aucs,surelda_ensemble_prediction_aucs)
 rownames(surelda_prediction_result_combined) <- c('sureLDA Scores','sureLDA Probs')
-print("AUCs:")
 print(surelda_prediction_result_combined)
 ```
 
