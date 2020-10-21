@@ -88,517 +88,70 @@
     
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">sureLDA</span>)</pre></body></html></div>
 <pre><code>## Loading required package: Matrix</code></pre>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">surelda_run_phenorm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span>(<span class="no">simdata</span>, <span class="fu"><a href="https://rdrr.io/pkg/sureLDA/man/sureLDA.html">sureLDA</a></span>(<span class="no">X</span>, <span class="no">ICD</span>, <span class="no">NLP</span>, <span class="no">HU</span>, <span class="no">filter</span>))</pre></body></html></div>
-<pre><code>## [1] "Starting PheNorm"
-## [1] "Predicting disease 1"
-## [1] "Predicting disease 2"
-## [1] "Predicting disease 3"
-## [1] "Predicting disease 4"
-## [1] "Predicting disease 5"
-## [1] "Predicting disease 6"
-## [1] "Predicting disease 7"
-## [1] "Predicting disease 8"
-## [1] "Predicting disease 9"
-## [1] "Predicting disease 10"
-## [1] "Finishing PheNorm"</code></pre>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">pROC</span>)</pre></body></html></div>
+<pre><code>## Type 'citation("pROC")' for a citation.</code></pre>
+<pre><code>## 
+## Attaching package: 'pROC'</code></pre>
+<pre><code>## The following objects are masked from 'package:stats':
+## 
+##     cov, smooth, var</code></pre>
+<p>Let N denote the number of patients, W the number of EHR features, and K the number of target phenotypes to be predicted. Our input data consists of 1) X, an NxW matrix of EHR feature counts, 2) ICD, an NxK matrix of key ICD code counts for each target phenotype, 3) NLP, an NxK matrix of key NLP feature counts for each target phenotype, 4) HU, an N-dimensional vector of healthcare utilization measurements (i.e. total patient encounters in a patient’s chart), and 5) an NxK matrix of filter indicators for each target phenotype (we assume P(phenotype | filter=0) = 0).</p>
+<p>First, we evaluate sureLDA with a PheNorm-generated prior (default) for prediction of 10 target phenotypes using a simulated dataset. We employ 10 ‘empty’ topics (this should generally be set in the range of 10-100).</p>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">surelda_run_phenorm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span>(
+  <span class="no">simdata</span>, <span class="fu"><a href="../reference/sureLDA.html">sureLDA</a></span>(<span class="no">X</span>, <span class="no">ICD</span>, <span class="no">NLP</span>, <span class="no">HU</span>, <span class="no">filter</span>, <span class="kw">nEmpty</span> <span class="kw">=</span> <span class="fl">10</span>))</pre></body></html></div>
+<pre><code>## [1] "Starting PheNorm"</code></pre>
 <pre><code>## Warning in if (typeof(weight) == "character" &amp; weight == "uniform") {: the
 ## condition has length &gt; 1 and only the first element will be used</code></pre>
-<pre><code>## [1] "Starting Guided LDA Step"
-## [1] "Starting Gibbs Sampling"
-## [1] "On iteration 1"
-## Initiation... 
-## wp[2,3]  = 0
-## dp[2,3]  = 0
-## ztot[2]  = 792240
-## weight[2,3]  =  0
-## prior[2,3]  = 0
-## Initiation done... 
-## iter 0
-## iter 1
-## iter 2
-## iter 3
-## iter 4
-## iter 5
-## iter 6
-## iter 7
-## iter 8
-## iter 9
-## iter 10
-## iter 11
-## iter 12
-## iter 13
-## iter 14
-## iter 15
-## iter 16
-## iter 17
-## iter 18
-## iter 19
-## iter 20
-## iter 21
-## iter 22
-## iter 23
-## iter 24
-## iter 25
-## iter 26
-## iter 27
-## iter 28
-## iter 29
-## iter 30
-## iter 31
-## iter 32
-## iter 33
-## iter 34
-## iter 35
-## iter 36
-## iter 37
-## iter 38
-## iter 39
-## iter 40
-## iter 41
-## iter 42
-## iter 43
-## iter 44
-## iter 45
-## iter 46
-## iter 47
-## iter 48
-## iter 49
-## iter 50
-## iter 51
-## iter 52
-## iter 53
-## iter 54
-## iter 55
-## iter 56
-## iter 57
-## iter 58
-## iter 59
-## iter 60
-## iter 61
-## iter 62
-## iter 63
-## iter 64
-## iter 65
-## iter 66
-## iter 67
-## iter 68
-## iter 69
-## iter 70
-## iter 71
-## iter 72
-## iter 73
-## iter 74
-## iter 75
-## iter 76
-## iter 77
-## iter 78
-## iter 79
-## iter 80
-## iter 81
-## iter 82
-## iter 83
-## iter 84
-## iter 85
-## iter 86
-## iter 87
-## iter 88
-## iter 89
-## iter 90
-## iter 91
-## iter 92
-## iter 93
-## iter 94
-## iter 95
-## iter 96
-## iter 97
-## iter 98
-## iter 99
-## iter 100
-## iter 101
-## iter 102
-## iter 103
-## iter 104
-## iter 105
-## iter 106
-## iter 107
-## iter 108
-## iter 109
-## iter 110
-## iter 111
-## iter 112
-## iter 113
-## iter 114
-## iter 115
-## iter 116
-## iter 117
-## iter 118
-## iter 119
-## iter 120
-## iter 121
-## iter 122
-## iter 123
-## iter 124
-## iter 125
-## iter 126
-## iter 127
-## iter 128
-## iter 129
-## iter 130
-## iter 131
-## iter 132
-## iter 133
-## iter 134
-## iter 135
-## iter 136
-## iter 137
-## iter 138
-## iter 139
-## iter 140
-## iter 141
-## iter 142
-## iter 143
-## iter 144
-## iter 145
-## iter 146
-## iter 147
-## iter 148
-## iter 149
-## [1] "On iteration 2"
-## Initiation... 
-## wp[2,3]  = 0
-## dp[2,3]  = 0
-## ztot[2]  = 793578
-## weight[2,3]  =  0
-## prior[2,3]  = 0
-## Initiation done... 
-## iter 0
-## iter 1
-## iter 2
-## iter 3
-## iter 4
-## iter 5
-## iter 6
-## iter 7
-## iter 8
-## iter 9
-## iter 10
-## iter 11
-## iter 12
-## iter 13
-## iter 14
-## iter 15
-## iter 16
-## iter 17
-## iter 18
-## iter 19
-## iter 20
-## iter 21
-## iter 22
-## iter 23
-## iter 24
-## iter 25
-## iter 26
-## iter 27
-## iter 28
-## iter 29
-## iter 30
-## iter 31
-## iter 32
-## iter 33
-## iter 34
-## iter 35
-## iter 36
-## iter 37
-## iter 38
-## iter 39
-## iter 40
-## iter 41
-## iter 42
-## iter 43
-## iter 44
-## iter 45
-## iter 46
-## iter 47
-## iter 48
-## iter 49
-## iter 50
-## iter 51
-## iter 52
-## iter 53
-## iter 54
-## iter 55
-## iter 56
-## iter 57
-## iter 58
-## iter 59
-## iter 60
-## iter 61
-## iter 62
-## iter 63
-## iter 64
-## iter 65
-## iter 66
-## iter 67
-## iter 68
-## iter 69
-## iter 70
-## iter 71
-## iter 72
-## iter 73
-## iter 74
-## iter 75
-## iter 76
-## iter 77
-## iter 78
-## iter 79
-## iter 80
-## iter 81
-## iter 82
-## iter 83
-## iter 84
-## iter 85
-## iter 86
-## iter 87
-## iter 88
-## iter 89
-## iter 90
-## iter 91
-## iter 92
-## iter 93
-## iter 94
-## iter 95
-## iter 96
-## iter 97
-## iter 98
-## iter 99
-## iter 100
-## iter 101
-## iter 102
-## iter 103
-## iter 104
-## iter 105
-## iter 106
-## iter 107
-## iter 108
-## iter 109
-## iter 110
-## iter 111
-## iter 112
-## iter 113
-## iter 114
-## iter 115
-## iter 116
-## iter 117
-## iter 118
-## iter 119
-## iter 120
-## iter 121
-## iter 122
-## iter 123
-## iter 124
-## iter 125
-## iter 126
-## iter 127
-## iter 128
-## iter 129
-## iter 130
-## iter 131
-## iter 132
-## iter 133
-## iter 134
-## iter 135
-## iter 136
-## iter 137
-## iter 138
-## iter 139
-## iter 140
-## iter 141
-## iter 142
-## iter 143
-## iter 144
-## iter 145
-## iter 146
-## iter 147
-## iter 148
-## iter 149
-## [1] "On iteration 3"
-## Initiation... 
-## wp[2,3]  = 0
-## dp[2,3]  = 0
-## ztot[2]  = 818572
-## weight[2,3]  =  0
-## prior[2,3]  = 0
-## Initiation done... 
-## iter 0
-## iter 1
-## iter 2
-## iter 3
-## iter 4
-## iter 5
-## iter 6
-## iter 7
-## iter 8
-## iter 9
-## iter 10
-## iter 11
-## iter 12
-## iter 13
-## iter 14
-## iter 15
-## iter 16
-## iter 17
-## iter 18
-## iter 19
-## iter 20
-## iter 21
-## iter 22
-## iter 23
-## iter 24
-## iter 25
-## iter 26
-## iter 27
-## iter 28
-## iter 29
-## iter 30
-## iter 31
-## iter 32
-## iter 33
-## iter 34
-## iter 35
-## iter 36
-## iter 37
-## iter 38
-## iter 39
-## iter 40
-## iter 41
-## iter 42
-## iter 43
-## iter 44
-## iter 45
-## iter 46
-## iter 47
-## iter 48
-## iter 49
-## iter 50
-## iter 51
-## iter 52
-## iter 53
-## iter 54
-## iter 55
-## iter 56
-## iter 57
-## iter 58
-## iter 59
-## iter 60
-## iter 61
-## iter 62
-## iter 63
-## iter 64
-## iter 65
-## iter 66
-## iter 67
-## iter 68
-## iter 69
-## iter 70
-## iter 71
-## iter 72
-## iter 73
-## iter 74
-## iter 75
-## iter 76
-## iter 77
-## iter 78
-## iter 79
-## iter 80
-## iter 81
-## iter 82
-## iter 83
-## iter 84
-## iter 85
-## iter 86
-## iter 87
-## iter 88
-## iter 89
-## iter 90
-## iter 91
-## iter 92
-## iter 93
-## iter 94
-## iter 95
-## iter 96
-## iter 97
-## iter 98
-## iter 99
-## iter 100
-## iter 101
-## iter 102
-## iter 103
-## iter 104
-## iter 105
-## iter 106
-## iter 107
-## iter 108
-## iter 109
-## iter 110
-## iter 111
-## iter 112
-## iter 113
-## iter 114
-## iter 115
-## iter 116
-## iter 117
-## iter 118
-## iter 119
-## iter 120
-## iter 121
-## iter 122
-## iter 123
-## iter 124
-## iter 125
-## iter 126
-## iter 127
-## iter 128
-## iter 129
-## iter 130
-## iter 131
-## iter 132
-## iter 133
-## iter 134
-## iter 135
-## iter 136
-## iter 137
-## iter 138
-## iter 139
-## iter 140
-## iter 141
-## iter 142
-## iter 143
-## iter 144
-## iter 145
-## iter 146
-## iter 147
-## iter 148
-## iter 149
-## [1] "Finishing Gibbs Sampling"
-## [1] "Starting final clustering step"
-## [1] "Predicting posterior 1"
-## [1] "Predicting posterior 2"
-## [1] "Predicting posterior 3"
-## [1] "Predicting posterior 4"
-## [1] "Predicting posterior 5"
-## [1] "Predicting posterior 6"
-## [1] "Predicting posterior 7"
-## [1] "Predicting posterior 8"
-## [1] "Predicting posterior 9"
-## [1] "Predicting posterior 10"</code></pre>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">surelda_scores_phenorm</span> <span class="kw">&lt;-</span> <span class="no">surelda_run_phenorm</span>$<span class="no">scores</span>
-<span class="no">surelda_ensemble_phenorm</span> <span class="kw">&lt;-</span> <span class="no">surelda_run_phenorm</span>$<span class="no">ensemble</span></pre></body></html></div>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">surelda_run_map</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span>(<span class="no">simdata</span>, <span class="fu"><a href="https://rdrr.io/pkg/sureLDA/man/sureLDA.html">sureLDA</a></span>(<span class="no">X</span>, <span class="no">ICD</span>, <span class="no">NLP</span>, <span class="no">HU</span>, <span class="no">filter</span>, <span class="kw">prior</span> <span class="kw">=</span> <span class="st">'MAP'</span>))
-<span class="no">surelda_scores_map</span> <span class="kw">&lt;-</span> <span class="no">surelda_run_phenorm</span>$<span class="no">scores</span>
-<span class="no">surelda_ensemble_map</span> <span class="kw">&lt;-</span> <span class="no">surelda_run_phenorm</span>$<span class="no">ensemble</span></pre></body></html></div>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span>()</pre></body></html></div>
+<pre><code>## [1] "Starting Guided LDA"
+## [1] "Starting final clustering"</code></pre>
+<p>Evaluating AUCs of sureLDA scores across 10 phenotypes</p>
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">surelda_scores_phenorm_aucs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span>(<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(<span class="no">simdata</span>$<span class="no">filter</span>),<span class="kw">function</span>(<span class="no">k</span>){
+  <span class="kw pkg">pROC</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/pROC/man/auc.html">auc</a></span>(<span class="no">simdata</span>$<span class="no">Y</span>[,<span class="no">k</span>],<span class="no">surelda_run_phenorm</span>$<span class="no">scores</span>[,<span class="no">k</span>])
+})</pre></body></html></div>
+<p>Evaluating AUCs of predicted probabilities across 10 phenotypes</p>
+<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">surelda_ensemble_phenorm_aucs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span>(<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(<span class="no">simdata</span>$<span class="no">filter</span>),<span class="kw">function</span>(<span class="no">k</span>){
+  <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/auc.html">auc</a></span>(<span class="no">simdata</span>$<span class="no">Y</span>[,<span class="no">k</span>],<span class="no">surelda_run_phenorm</span>$<span class="no">ensemble</span>[,<span class="no">k</span>])
+})</pre></body></html></div>
+<p>AUCs:</p>
+<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="no">surelda_result_combined</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="no">surelda_scores_phenorm_aucs</span>,<span class="no">surelda_ensemble_phenorm_aucs</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">surelda_result_combined</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'sureLDA Scores'</span>,<span class="st">'sureLDA Probs'</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">surelda_result_combined</span>)</pre></body></html></div>
+<pre><code>##                     [,1]      [,2]      [,3]      [,4]      [,5]      [,6]
+## sureLDA Scores 0.9102323 0.8695367 0.8737995 0.9114881 0.8760054 0.8610688
+## sureLDA Probs  0.9117233 0.8638507 0.8724018 0.9086607 0.8754891 0.8660137
+##                     [,7]      [,8]      [,9]     [,10]
+## sureLDA Scores 0.9955601 0.7775945 0.8730894 0.9002062
+## sureLDA Probs  0.9865096 0.7710653 0.8669900 0.8947079</code></pre>
+<p>Next, we evaluate sureLDA’s predictions of the same 10 target phenotypes using the same data but given the prior and phi estimators from the previous run.</p>
+<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="no">surelda_prediction</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span>(<span class="no">simdata</span>,
+                        <span class="fu"><a href="../reference/sureLDA.html">sureLDA</a></span>(<span class="no">X</span>, <span class="no">ICD</span>, <span class="no">NLP</span>, <span class="no">HU</span>, <span class="no">filter</span>, <span class="kw">prior</span> <span class="kw">=</span> <span class="no">surelda_run_phenorm</span>$<span class="no">prior</span>, <span class="kw">nEmpty</span> <span class="kw">=</span> <span class="fl">10</span>,
+                              <span class="kw">weight</span> <span class="kw">=</span> <span class="no">surelda_run_phenorm</span>$<span class="no">weight</span>, <span class="kw">phi</span> <span class="kw">=</span> <span class="no">surelda_run_phenorm</span>$<span class="no">phi</span>))</pre></body></html></div>
+<pre><code>## Warning in if (typeof(weight) == "character" &amp; weight == "uniform") {: the
+## condition has length &gt; 1 and only the first element will be used</code></pre>
+<pre><code>## [1] "Inferring theta given provided phi"
+## [1] "Starting final clustering"</code></pre>
+<p>Evaluating AUCs of sureLDA scores across 10 phenotypes</p>
+<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="no">surelda_scores_prediction_aucs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span>(<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(<span class="no">simdata</span>$<span class="no">filter</span>),<span class="kw">function</span>(<span class="no">k</span>){
+  <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/auc.html">auc</a></span>(<span class="no">simdata</span>$<span class="no">Y</span>[,<span class="no">k</span>],<span class="no">surelda_prediction</span>$<span class="no">scores</span>[,<span class="no">k</span>])
+})</pre></body></html></div>
+<p>Evaluating AUCs of predicted probabilities across 10 phenotypes</p>
+<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="no">surelda_ensemble_prediction_aucs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span>(<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(<span class="no">simdata</span>$<span class="no">filter</span>),<span class="kw">function</span>(<span class="no">k</span>){
+  <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/auc.html">auc</a></span>(<span class="no">simdata</span>$<span class="no">Y</span>[,<span class="no">k</span>],<span class="no">surelda_prediction</span>$<span class="no">ensemble</span>[,<span class="no">k</span>])
+})</pre></body></html></div>
+<p>AUCs:</p>
+<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="no">surelda_prediction_result_combined</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="no">surelda_scores_prediction_aucs</span>,<span class="no">surelda_ensemble_prediction_aucs</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">surelda_prediction_result_combined</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'sureLDA Scores'</span>,<span class="st">'sureLDA Probs'</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">surelda_prediction_result_combined</span>)</pre></body></html></div>
+<pre><code>##                     [,1]      [,2]      [,3]      [,4]      [,5]      [,6]
+## sureLDA Scores 0.9109100 0.8672833 0.8720793 0.9122024 0.8733696 0.8664892
+## sureLDA Probs  0.9129941 0.8664186 0.8733694 0.9125595 0.8767935 0.8687714
+##                     [,7]      [,8]      [,9]     [,10]
+## sureLDA Scores 0.9957309 0.7751890 0.8683128 0.9028179
+## sureLDA Probs  0.9904372 0.7760137 0.8666961 0.8948454</code></pre>
+<p>Total time spent:</p>
+<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span>()</pre></body></html></div>
 <pre><code>##    user  system elapsed 
-##  75.450   0.407  75.998</code></pre>
+##  82.140   0.434  82.641</code></pre>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

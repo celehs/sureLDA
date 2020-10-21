@@ -128,7 +128,7 @@ arma::umat lda_rcpp(arma::uvec d, arma::uvec w, arma::uvec z,
                 Rcout << "On iteration " << iter-burnin << "of" << ITER << "\n";
             }
         }
-        else if {
+        else if (verbose) {
             Rcout << "On burnin " << iter << "of" << burnin << "\n";
         }
     }

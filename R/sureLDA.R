@@ -54,6 +54,7 @@ expit <- function(x){1/(1+exp(-x))}
 #' @param phi (optional) nPhenotypes x nFeatures pre-trained topic-feature distribution matrix
 #' @param nCores (optional) Number of parallel cores to use only if phi is provided (defaults to 1)
 #' @param labeled (optional) nPatients x nPhenotypes matrix of a priori labels (set missing entries to NA)
+#' @param verbose (optional) indicating whether to output verbose progress updates
 #' 
 #' @return scores nPatients x nPhenotypes matrix of weighted patient-phenotype assignment counts from LDA step
 #' @return probs nPatients x nPhenotypes matrix of patient-phenotype posterior probabilities
@@ -65,7 +66,7 @@ expit <- function(x){1/(1+exp(-x))}
 #' @export
 sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
                     nEmpty = 20, alpha = 100, beta = 100, burnin = 50, ITER = 150, 
-                    phi = NULL, nCores=1, labeled = NULL, verbose=TRUE) {
+                    phi = NULL, nCores=1, labeled = NULL, verbose=FALSE) {
   knowndiseases = ncol(ICD)
   D = knowndiseases + nEmpty
   W = ncol(X)

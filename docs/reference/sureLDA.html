@@ -141,6 +141,7 @@
   <span class='kw'>burnin</span> <span class='kw'>=</span> <span class='fl'>50</span>,
   <span class='kw'>ITER</span> <span class='kw'>=</span> <span class='fl'>150</span>,
   <span class='kw'>phi</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>nCores</span> <span class='kw'>=</span> <span class='fl'>1</span>,
   <span class='kw'>labeled</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
 )</pre>
 
@@ -149,7 +150,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>X</th>
-      <td><p>nPatients x nFeatures matrix of feature counts</p></td>
+      <td><p>nPatients x nFeatures matrix of EHR feature counts</p></td>
     </tr>
     <tr>
       <th>ICD</th>
@@ -161,7 +162,7 @@
     </tr>
     <tr>
       <th>HU</th>
-      <td><p>nPatients-dimensional hospital utilization vector</p></td>
+      <td><p>nPatients-dimensional vector containing the healthcare utilization feature</p></td>
     </tr>
     <tr>
       <th>filter</th>
@@ -169,42 +170,54 @@
     </tr>
     <tr>
       <th>prior</th>
-      <td><p>'PheNorm', 'MAP', or nPatients x nPhenotypes matrix of prior probabilities</p></td>
+      <td><p>'PheNorm', 'MAP', or nPatients x nPhenotypes matrix of prior probabilities (defaults to PheNorm)</p></td>
     </tr>
     <tr>
       <th>weight</th>
-      <td><p>'beta', 'uniform', or nPhenotypes x nFeatures matrix of feature weights</p></td>
+      <td><p>'beta', 'uniform', or nPhenotypes x nFeatures matrix of feature weights (defaults to beta)</p></td>
     </tr>
     <tr>
       <th>nEmpty</th>
-      <td><p>Number of 'empty' topics to include in LDA step</p></td>
+      <td><p>Number of 'empty' topics to include in LDA step (defaults to 10)</p></td>
     </tr>
     <tr>
       <th>alpha</th>
-      <td><p>LDA hyperparameters</p></td>
+      <td><p>LDA Dirichlet hyperparameter for patient-topic distribution (defaults to 100)</p></td>
     </tr>
     <tr>
       <th>beta</th>
-      <td><p>LDA hyperparameters</p></td>
+      <td><p>LDA Dirichlet hyperparameter for topic-feature distribution (defaults to 100)</p></td>
     </tr>
     <tr>
       <th>burnin</th>
-      <td><p>number of burnin Gibbs iterations</p></td>
+      <td><p>number of burnin Gibbs iterations (defaults to 50)</p></td>
     </tr>
     <tr>
       <th>ITER</th>
-      <td><p>number of subsequent iterations for inference</p></td>
+      <td><p>number of subsequent iterations for inference (defaults to 150)</p></td>
     </tr>
     <tr>
       <th>phi</th>
-      <td><p>...</p></td>
+      <td><p>(optional) nPhenotypes x nFeatures pre-trained topic-feature distribution matrix</p></td>
+    </tr>
+    <tr>
+      <th>nCores</th>
+      <td><p>(optional) Number of parallel cores to use only if phi is provided (defaults to 1)</p></td>
     </tr>
     <tr>
       <th>labeled</th>
-      <td><p>(optional) = NA when missing, non-NA for observed</p></td>
+      <td><p>(optional) nPatients x nPhenotypes matrix of a priori labels (set missing entries to NA)</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>scores nPatients x nPhenotypes matrix of weighted patient-phenotype assignment counts from LDA step</p>
+<p>probs nPatients x nPhenotypes matrix of patient-phenotype posterior probabilities</p>
+<p>ensemble Mean of sureLDA posterior and PheNorm/MAP prior</p>
+<p>prior nPatients x nPhenotypes matrix of PheNorm/MAP phenotype probability estimates</p>
+<p>phi nPhenotypes x nFeatures topic distribution matrix from LDA step</p>
+<p>weights nPhenotypes x nFeatures matrix of topic-feature weights</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

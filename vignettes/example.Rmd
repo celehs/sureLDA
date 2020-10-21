@@ -2,7 +2,7 @@
 title: "Simulated Example"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{example}
+  %\VignetteIndexEntry{Simulated Example}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -17,20 +17,21 @@ Let N denote the number of patients, W the number of EHR features, and K the num
 First, we evaluate sureLDA with a PheNorm-generated prior (default) for prediction of 10 target phenotypes using a simulated dataset. We employ 10 'empty' topics (this should generally be set in the range of 10-100).
 
 ```{r}
-surelda_run_phenorm <- with(simdata, sureLDA(X, ICD, NLP, HU, filter, nEmpty=10))
+surelda_run_phenorm <- with(
+  simdata, sureLDA(X, ICD, NLP, HU, filter, nEmpty = 10))
 ```
 
 Evaluating AUCs of sureLDA scores across 10 phenotypes
 
-```{r}
+```{r, message=FALSE}
 surelda_scores_phenorm_aucs <- sapply(1:ncol(simdata$filter),function(k){
-  auc(simdata$Y[,k],surelda_run_phenorm$scores[,k])
+  pROC::auc(simdata$Y[,k],surelda_run_phenorm$scores[,k])
 })
 ```
 
 Evaluating AUCs of predicted probabilities across 10 phenotypes
 
-```{r}
+```{r, message=FALSE}
 surelda_ensemble_phenorm_aucs <- sapply(1:ncol(simdata$filter),function(k){
   auc(simdata$Y[,k],surelda_run_phenorm$ensemble[,k])
 })
@@ -54,7 +55,7 @@ surelda_prediction <- with(simdata,
 
 Evaluating AUCs of sureLDA scores across 10 phenotypes
 
-```{r}
+```{r, message=FALSE}
 surelda_scores_prediction_aucs <- sapply(1:ncol(simdata$filter),function(k){
   auc(simdata$Y[,k],surelda_prediction$scores[,k])
 })
@@ -62,7 +63,7 @@ surelda_scores_prediction_aucs <- sapply(1:ncol(simdata$filter),function(k){
 
 Evaluating AUCs of predicted probabilities across 10 phenotypes
 
-```{r}
+```{r, message=FALSE}
 surelda_ensemble_prediction_aucs <- sapply(1:ncol(simdata$filter),function(k){
   auc(simdata$Y[,k],surelda_prediction$ensemble[,k])
 })
@@ -76,7 +77,7 @@ rownames(surelda_prediction_result_combined) <- c('sureLDA Scores','sureLDA Prob
 print(surelda_prediction_result_combined)
 ```
 
-```{r, eval=FALSE}
+```{r, echo=FALSE, eval=FALSE}
 surelda_run_map <- with(simdata, sureLDA(X, ICD, NLP, HU, filter, prior = 'MAP'))
 surelda_scores_map <- surelda_run_phenorm$scores
 surelda_ensemble_map <- surelda_run_phenorm$ensemble

@@ -67,7 +67,7 @@ ICD <- Sim$X[,2:11]
 NLP <- Sim$X[,12:21]
 nPatients = N
 
-simdata <- list(X = X, ICD = ICD, NLP = NLP, HU = HU, filter = filter)
+simdata <- list(Y = Y, X = X, ICD = ICD, NLP = NLP, HU = HU, filter = filter)
 str(simdata)
 
 usethis::use_data(simdata, overwrite = TRUE)

@@ -19,7 +19,8 @@ sureLDA(
   ITER = 150,
   phi = NULL,
   nCores = 1,
-  labeled = NULL
+  labeled = NULL,
+  verbose = FALSE
 )
 }
 \arguments{
@@ -52,6 +53,8 @@ sureLDA(
 \item{nCores}{(optional) Number of parallel cores to use only if phi is provided (defaults to 1)}
 
 \item{labeled}{(optional) nPatients x nPhenotypes matrix of a priori labels (set missing entries to NA)}
+
+\item{verbose}{(optional) indicating whether to output verbose progress updates}
 }
 \value{
 scores nPatients x nPhenotypes matrix of weighted patient-phenotype assignment counts from LDA step
