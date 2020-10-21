@@ -17,8 +17,13 @@ Depends:
     R (>= 3.0), 
     Matrix
 Imports: 
+    pROC,
+    glmnet,
+    MAP,
     Rcpp, 
-    RcppArmadillo
+    RcppArmadillo,
+    foreach,
+    doParallel
 LinkingTo: 
     Rcpp, 
     RcppArmadillo

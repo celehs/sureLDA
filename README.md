@@ -24,4 +24,4 @@ Click [HERE](https://celehs.github.io/sureLDA/articles/example.html) to view a d
 
 ## References
 
-Y. Ahuja, D. Zhou, Z. He, J. Sun, V. M. Castro, V. Gainer, S. N. Murphy, C. Hong, T. Cai (2020). sureLDA: A Multi-Disease Automated Phenotyping Method for the Electronic Health Record. JAMIA.
+Y. Ahuja, D. Zhou, Z. He, J. Sun, V. M. Castro, V. Gainer, S. N. Murphy, C. Hong, T. Cai. sureLDA: A Multi-Disease Automated Phenotyping Method for the Electronic Health Record. J Am Med Inform Assoc (2020); 27(8): 1235-1243

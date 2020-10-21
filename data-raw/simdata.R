@@ -53,9 +53,10 @@ Simulate<-function(N=10000,K=10,M=50){
 }
 
 set.seed(123)
-N=1000  ##Number of patients
+
+N=500  ##Number of patients
 K=10     ##Number of diseases
-M=50     ##Number of features for each diseases, two of them are ICD and NLP.
+M=10     ##Number of features for each diseases, two of them are ICD and NLP.
 Sim <- Simulate(N,K,M)
 X <- Sim$X[,-1]
 Y <- Sim$Y
@@ -65,7 +66,8 @@ HU <- Sim$X[,1]
 ICD <- Sim$X[,2:11]
 NLP <- Sim$X[,12:21]
 nPatients = N
-weight <- matrix(1,K*M,K)
 
-simdata <- list(X = X, weight = weight, ICD = ICD, NLP = NLP, HU = HU, filter = filter)
+simdata <- list(Y = Y, X = X, ICD = ICD, NLP = NLP, HU = HU, filter = filter)
 str(simdata)
+
+usethis::use_data(simdata, overwrite = TRUE)
