@@ -56,7 +56,7 @@ void init_lda_v2(arma::umat& wp, arma::umat& dp, arma::uvec& ztot,
 arma::umat lda_rcpp(arma::uvec d, arma::uvec w, arma::uvec z,
                     arma::umat weight, arma::mat prior, double alpha,
                     double beta, int T, int knowndiseases,
-                    int burnin, int ITER){
+                    int burnin, int ITER, bool verbose){
 
     int N = d.n_elem;
     int W = weight.n_cols;
@@ -78,20 +78,12 @@ arma::umat lda_rcpp(arma::uvec d, arma::uvec w, arma::uvec z,
     arma::umat dp(T,D);
     dp.zeros();
     
-    
-    Rcout << "Initiation... \n";
+    if (verbose){
+        Rcout << "Initializing variables\n";
+    }
     
     init_lda_v2(wp, dp, ztot, weight, prior, d, w, z, N, T, knowndiseases);
-    
-    
-    Rcout << "wp[2,3]  = "<< wp(2,3) << "\n";
-    Rcout << "dp[2,3]  = "<< dp(2,3) << "\n";
-    Rcout << "ztot[2]  = "<< ztot[2] << "\n";
-    Rcout << "weight[2,3]  =  "<< weight(2,3) << "\n";
-    Rcout << "prior[2,3]  = "<< prior(2,3) << "\n";
-    
-    Rcout << "Initiation done... \n";
-    
+
     for(iter=0;iter<ITER+burnin;iter++){
         
         for(i=0;i<N;i++){
@@ -132,10 +124,12 @@ arma::umat lda_rcpp(arma::uvec d, arma::uvec w, arma::uvec z,
                    res(t,D+i) += wp(t,i);
                }
             }
-            Rcout << "Iteration " << iter-burnin << "\n";
+            if (verbose){
+                Rcout << "On iteration " << iter-burnin << "of" << ITER << "\n";
+            }
         }
-        else{
-            Rcout << "Burnin " << iter << "\n";
+        else if {
+            Rcout << "On burnin " << iter << "of" << burnin << "\n";
         }
     }
     

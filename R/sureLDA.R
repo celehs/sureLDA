@@ -65,7 +65,7 @@ expit <- function(x){1/(1+exp(-x))}
 #' @export
 sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
                     nEmpty = 20, alpha = 100, beta = 100, burnin = 50, ITER = 150, 
-                    phi = NULL, nCores=1, labeled = NULL) {
+                    phi = NULL, nCores=1, labeled = NULL, verbose=TRUE) {
   knowndiseases = ncol(ICD)
   D = knowndiseases + nEmpty
   W = ncol(X)
@@ -75,12 +75,16 @@ sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
   ## PheNorm/MAP (Step 1) ##
   
   if (typeof(prior) != 'character'){
-    print('Prior supplied')
+    if (verbose){
+      print('Prior supplied')
+    }
   }
   else if (prior == 'PheNorm' & (typeof(weight) != 'character' | weight == 'uniform')){
     print("Starting PheNorm")
     prior <- sapply(1:knowndiseases, function(i){
-      print(paste("Predicting disease",i))
+      if (verbose){
+        print(paste("Predicting disease",i))
+      }
       
       mat = Matrix(data=cbind(log(ICD[,i]+1), log(NLP[,i]+1), log(ICD[,i]+NLP[,i]+1)), sparse=TRUE)
       note = Matrix(data=log(HU+1), sparse=TRUE)
@@ -98,7 +102,9 @@ sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
     prior <- matrix(nrow=N,ncol=knowndiseases)
     weight <- matrix(nrow=knowndiseases,ncol=W)
     for (i in 1:knowndiseases){
-      print(paste("Predicting disease",i))
+      if (verbose){
+        print(paste("Predicting disease",i))
+      }
       
       mat = Matrix(data=cbind(log(ICD[,i]+1), log(NLP[,i]+1), log(ICD[,i]+NLP[,i]+1)), sparse=TRUE)
       note = Matrix(data=log(HU+1), sparse=TRUE)
@@ -111,12 +117,13 @@ sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
       prior[,i] <- score
       weight[i,] <- as.vector(fit.phenorm$betas[,3])
     }
-    print("Finishing PheNorm")
   }
   else if (prior == 'MAP'){
     print("Starting MAP")
     prior <- sapply(1:knowndiseases, function(i){
-      print(paste("Predicting prior",i))
+      if (verbose){
+        print(paste("Predicting prior",i))
+      }
       
       filterpos = which(filter[,i]==1)
       mat = Matrix(data=cbind(ICD[filterpos,i],NLP[filterpos,i]), sparse=TRUE)
@@ -134,7 +141,9 @@ sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
     
     if (typeof(weight)=='character' & weight == 'beta'){
       weight <- t(sapply(1:knowndiseases, function(i){
-        print(paste("Predicting weight",i))
+        if (verbose){
+          print(paste("Predicting weight",i))
+        }
         filterpos = which(filter[,i]==1)
         
         SX.norm.corrupt <- apply(X[filterpos,],2,function(x){
@@ -147,7 +156,6 @@ sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
         glmnet::coef.glmnet(glmnet::glmnet(SX.norm.corrupt,logit_prior,weights=reg.weights,intercept=FALSE), s=0)[-1]
       }))
     }
-    print("Finishing MAP")
   }
   
   if (typeof(weight) == 'character' & weight == 'uniform'){
@@ -166,7 +174,7 @@ sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
   
   ## Guided LDA (Step 2) ##
   if (is.null(phi)){
-    print('Starting Guided LDA Step')
+    print('Starting Guided LDA')
     
     Add_probs = matrix(0,ncol=(D-knowndiseases),nrow=N)
     priorLDA = t(cbind(prior,Add_probs)) ##MAP_initial_probs is a matrix of N rows, 10
@@ -177,14 +185,12 @@ sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
     w = rep(xx$variable,xx$value) - 1
     z = rep(0,length(d))
     
-    print('Starting Gibbs Sampling')
-    
     res = foreach::foreach(it=1:3) %do% {
-      print(paste('On iteration',it))
-      lda_rcpp(d,w,z,weight,priorLDA,alpha,beta,D,knowndiseases,burnin,ITER)
+      if (verbose){
+        print(paste('On iteration',it))
+      }
+      lda_rcpp(d,w,z,weight,priorLDA,alpha,beta,D,knowndiseases,burnin,ITER,verbose)
     }
-    
-    print('Finishing Gibbs Sampling')
     
     resSum = res[[1]] + res[[2]] + res[[3]]
     if (knowndiseases == 1){
@@ -210,9 +216,11 @@ sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
   
   
   ## Clustering of surrogates with sureLDA score (Step 3) ##
-  print("Starting final clustering step")
+  print("Starting final clustering")
   posterior <- sapply(1:knowndiseases, function(i){
-    print(paste("Predicting posterior",i))
+    if (verbose){
+      print(paste("Predicting posterior",i))
+    }
     
     mat = Matrix(data=log(LDA_Ndk_predicted[,i]+1), sparse=TRUE)
     note = Matrix(data=log(HU+1), sparse=TRUE)
