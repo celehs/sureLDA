@@ -67,6 +67,7 @@ expit <- function(x){1/(1+exp(-x))}
 sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
                     nEmpty = 20, alpha = 100, beta = 100, burnin = 50, ITER = 150, 
                     phi = NULL, nCores=1, labeled = NULL, verbose=FALSE) {
+  X <- as.matrix(X); ICD <- as.matrix(ICD); NLP <- as.matrix(NLP); filter <- as.matrix(filter)
   knowndiseases = ncol(ICD)
   D = knowndiseases + nEmpty
   W = ncol(X)
@@ -80,7 +81,7 @@ sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
       print('Prior supplied')
     }
   }
-  else if (prior == 'PheNorm' & (typeof(weight) != 'character' | weight == 'uniform')){
+  else if (prior == 'PheNorm' && (typeof(weight) != 'character' || weight == 'uniform')){
     print("Starting PheNorm")
     prior <- sapply(1:knowndiseases, function(i){
       if (verbose){
@@ -98,7 +99,7 @@ sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
       score
     })
   }
-  else if (prior == 'PheNorm' & weight == 'beta'){
+  else if (prior == 'PheNorm' && weight == 'beta'){
     print("Starting PheNorm")
     prior <- matrix(nrow=N,ncol=knowndiseases)
     weight <- matrix(nrow=knowndiseases,ncol=W)
@@ -140,7 +141,7 @@ sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
       stop('MAP output has NAs')
     }
     
-    if (typeof(weight)=='character' & weight == 'beta'){
+    if (typeof(weight) == 'character' && weight == 'beta'){
       weight <- t(sapply(1:knowndiseases, function(i){
         if (verbose){
           print(paste("Predicting weight",i))
@@ -159,7 +160,7 @@ sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
     }
   }
   
-  if (typeof(weight) == 'character' & weight == 'uniform'){
+  if (typeof(weight) == 'character' && weight == 'uniform'){
     weight = matrix(100,nrow=knowndiseases,ncol=W)
   }
   
