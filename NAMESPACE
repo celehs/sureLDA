@@ -3,7 +3,6 @@
 export(sureLDA)
 import(Matrix)
 import(Rcpp)
-import(RcppArmadillo)
 import(glmnet)
 importFrom(stats,ecdf)
 importFrom(stats,lm)

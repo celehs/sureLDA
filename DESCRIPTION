@@ -7,7 +7,7 @@ Authors@R: c(
     person("Tianxi", "Cai", role = c("aut")),
     person(family = "PARSE LTD", role = c("aut"))   
     )
-Description: See Ahuja et al. (2020) sureLDA: A multidisease automated phenotyping method for the electronic health record. J Am Med Inform Assoc; 27(8): 1235-1243 <doi:10.1093/jamia/ocaa079>
+Description: sureLDA is a novel method to simultaneously predict a range of target phenotypes using codified and NLP-derived EHR data. See Ahuja et al (2020) JAMIA <doi:10.1093/jamia/ocaa079> for details.
 URL: https://github.com/celehs/sureLDA
 BugReports: https://github.com/celehs/sureLDA/issues
 License: GPL-3
