@@ -7,7 +7,7 @@ Authors@R: c(
     person("Tianxi", "Cai", role = c("aut")),
     person(family = "PARSE LTD", role = c("aut"))   
     )
-Description: A Novel Multi-Disease Automated Phenotyping Method for the Electronic Health Record.
+Description: See Ahuja et al. (2020) sureLDA: A multidisease automated phenotyping method for the electronic health record. J Am Med Inform Assoc; 27(8): 1235-1243; https://doi.org/10.1093/jamia/ocaa079
 URL: https://github.com/celehs/sureLDA
 BugReports: https://github.com/celehs/sureLDA/issues
 License: GPL-3
@@ -20,8 +20,7 @@ Imports:
     pROC,
     glmnet,
     MAP,
-    Rcpp, 
-    RcppArmadillo,
+    Rcpp,
     foreach,
     doParallel
 LinkingTo: 
