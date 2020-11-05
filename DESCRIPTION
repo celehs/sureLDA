@@ -1,13 +1,13 @@
 Package: sureLDA
 Type: Package
-Title: A Novel Multi-Disease Automated Phenotyping Method for the Electronic Health Record
+Title: A Novel Multi-Disease Automated Phenotyping Method for the EHR
 Version: 0.1.0-1
 Authors@R: c(
     person("Yuri", "Ahuja", role = c("aut", "cre"), email = "Yuri_Ahuja@hms.harvard.edu"),
     person("Tianxi", "Cai", role = c("aut")),
     person(family = "PARSE LTD", role = c("aut"))   
     )
-Description: sureLDA is a novel method to simultaneously predict a range of target phenotypes using codified and NLP-derived EHR data. See Ahuja et al (2020) JAMIA <doi:10.1093/jamia/ocaa079> for details.
+Description: A statistical learning method to simultaneously predict a range of target phenotypes using codified and natural language processing (NLP)-derived Electronic Health Record (EHR) data. See Ahuja et al (2020) JAMIA <doi:10.1093/jamia/ocaa079> for details.
 URL: https://github.com/celehs/sureLDA
 BugReports: https://github.com/celehs/sureLDA/issues
 License: GPL-3

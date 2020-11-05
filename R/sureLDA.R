@@ -78,14 +78,14 @@ sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
   
   if (typeof(prior) != 'character'){
     if (verbose){
-      print('Prior supplied')
+      message('Prior supplied')
     }
   }
   else if (prior == 'PheNorm' && (typeof(weight) != 'character' || weight == 'uniform')){
-    print("Starting PheNorm")
+    message("Starting PheNorm")
     prior <- sapply(1:knowndiseases, function(i){
       if (verbose){
-        print(paste("Predicting disease",i))
+        message(paste("Predicting disease",i))
       }
       
       mat = Matrix(data=cbind(log(ICD[,i]+1), log(NLP[,i]+1), log(ICD[,i]+NLP[,i]+1)), sparse=TRUE)
@@ -100,12 +100,12 @@ sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
     })
   }
   else if (prior == 'PheNorm' && weight == 'beta'){
-    print("Starting PheNorm")
+    message("Starting PheNorm")
     prior <- matrix(nrow=N,ncol=knowndiseases)
     weight <- matrix(nrow=knowndiseases,ncol=W)
     for (i in 1:knowndiseases){
       if (verbose){
-        print(paste("Predicting disease",i))
+        message(paste("Predicting disease",i))
       }
       
       mat = Matrix(data=cbind(log(ICD[,i]+1), log(NLP[,i]+1), log(ICD[,i]+NLP[,i]+1)), sparse=TRUE)
@@ -121,10 +121,10 @@ sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
     }
   }
   else if (prior == 'MAP'){
-    print("Starting MAP")
+    message("Starting MAP")
     prior <- sapply(1:knowndiseases, function(i){
       if (verbose){
-        print(paste("Predicting prior",i))
+        message(paste("Predicting prior",i))
       }
       
       filterpos = which(filter[,i]==1)
@@ -144,7 +144,7 @@ sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
     if (typeof(weight) == 'character' && weight == 'beta'){
       weight <- t(sapply(1:knowndiseases, function(i){
         if (verbose){
-          print(paste("Predicting weight",i))
+          message(paste("Predicting weight",i))
         }
         filterpos = which(filter[,i]==1)
         
@@ -176,7 +176,7 @@ sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
   
   ## Guided LDA (Step 2) ##
   if (is.null(phi)){
-    print('Starting Guided LDA')
+    message('Starting Guided LDA')
     
     Add_probs = matrix(0,ncol=(D-knowndiseases),nrow=N)
     priorLDA = t(cbind(prior,Add_probs)) ##MAP_initial_probs is a matrix of N rows, 10
@@ -189,7 +189,7 @@ sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
     
     res = foreach::foreach(it=1:3) %do% {
       if (verbose){
-        print(paste('On iteration',it))
+        message(paste('On iteration',it))
       }
       lda_rcpp(d,w,z,weight,priorLDA,alpha,beta,D,knowndiseases,burnin,ITER,verbose)
     }
@@ -205,7 +205,7 @@ sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
 
   }
   else{
-    print("Inferring theta given provided phi")
+    message("Inferring theta given provided phi")
     
     if (nCores == 1){
       LDA_Ndk_predicted <- lda_pred_rcpp(weight=weight,X=X,prior=prior,phi=phi+1e-10)
@@ -218,10 +218,10 @@ sureLDA <- function(X, ICD, NLP, HU, filter, prior = 'PheNorm', weight = 'beta',
   
   
   ## Clustering of surrogates with sureLDA score (Step 3) ##
-  print("Starting final clustering")
+  message("Starting final clustering")
   posterior <- sapply(1:knowndiseases, function(i){
     if (verbose){
-      print(paste("Predicting posterior",i))
+      message(paste("Predicting posterior",i))
     }
     
     mat = Matrix(data=log(LDA_Ndk_predicted[,i]+1), sparse=TRUE)
