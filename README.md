@@ -1,27 +1,44 @@
+
+# sureLDA: A Novel Multi-Disease Automated Phenotyping Method for the EHR
+
 ## Overview
 
-Surrogate-guided ensemble Latent Dirichlet Allocation (sureLDA) is a label-free multidimensional phenotyping method. It first uses the PheNorm or MAP algorithm to initialize probabilities based on two surrogate features for each target disease, and then leverages these probabilities to guide the LDA topic model to generate phenotype-specific topics. Finally, it combines phenotype-feature counts with surrogates via clustering ensemble to yield final phenotype probabilities. 
+Surrogate-guided ensemble Latent Dirichlet Allocation (sureLDA) is a
+label-free multidimensional phenotyping method. It first uses the
+PheNorm or MAP algorithm to initialize probabilities based on two
+surrogate features for each target disease, and then leverages these
+probabilities to guide the LDA topic model to generate
+phenotype-specific topics. Finally, it combines phenotype-feature counts
+with surrogates via clustering ensemble to yield final phenotype
+probabilities.
 
-See Ahuja et al. JAMIA (2020) for details.
+See Ahuja et al. JAMIA (2020) for details.
 
 ## Installation
 
-If `devtools` is not installed, uncomment the code below and install it from CRAN.
+The `sureLDA` package can be installed from CRAN or GitHub.
+
+-   Install stable version from CRAN:
 
 ``` r
-# install.packages("devtools")
+install.packages("sureLDA")
 ```
 
-Run the code below to install `sureLDA` from GitHub:
+-   Install development version from GitHub:
 
 ``` r
-devtools::install_github("celehs/sureLDA")
+# install.packages("remotes")
+remotes::install_github("celehs/sureLDA")
 ```
 
 ## Getting Started
 
-Click [HERE](https://celehs.github.io/sureLDA/articles/example.html) to view a demo with a simulated example.
+Click [HERE](https://celehs.github.io/sureLDA/articles/example.html) to
+view a demo with a simulated example.
 
 ## References
 
-Y. Ahuja, D. Zhou, Z. He, J. Sun, V. M. Castro, V. Gainer, S. N. Murphy, C. Hong, T. Cai. sureLDA: A Multi-Disease Automated Phenotyping Method for the Electronic Health Record. J Am Med Inform Assoc (2020); 27(8): 1235-1243
+Y. Ahuja, D. Zhou, Z. He, J. Sun, V. M. Castro, V. Gainer, S. N. Murphy,
+C. Hong, T. Cai. sureLDA: A Multi-Disease Automated Phenotyping Method
+for the Electronic Health Record. J Am Med Inform Assoc (2020); 27(8):
+1235-1243

@@ -19,7 +19,7 @@
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/spacelab/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
@@ -79,14 +79,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sureLDA</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0-1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">Home</a>
+  <a href="../index.html">
+    <span class="fas fa-home"></span>
+     
+  </a>
 </li>
 <li>
   <a href="../articles/example.html">Example</a>
@@ -94,16 +97,10 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li>
-  <a href="https://github.com/celehs/sureLDA">GitHub</a>
-</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/celehs/sureLDA/">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
+  <a href="https://celehs.github.io">CELEHS Software</a>
 </li>
       </ul>
       
@@ -127,23 +124,24 @@
     <p>Surrogate-guided ensemble Latent Dirichlet Allocation</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sureLDA</span>(
-  <span class='no'>X</span>,
-  <span class='no'>ICD</span>,
-  <span class='no'>NLP</span>,
-  <span class='no'>HU</span>,
-  <span class='no'>filter</span>,
-  <span class='kw'>prior</span> <span class='kw'>=</span> <span class='st'>"PheNorm"</span>,
-  <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"beta"</span>,
-  <span class='kw'>nEmpty</span> <span class='kw'>=</span> <span class='fl'>20</span>,
-  <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>100</span>,
-  <span class='kw'>beta</span> <span class='kw'>=</span> <span class='fl'>100</span>,
-  <span class='kw'>burnin</span> <span class='kw'>=</span> <span class='fl'>50</span>,
-  <span class='kw'>ITER</span> <span class='kw'>=</span> <span class='fl'>150</span>,
-  <span class='kw'>phi</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>nCores</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>labeled</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)</pre>
+    <pre class="usage"><span class='fu'>sureLDA</span><span class='op'>(</span>
+  <span class='va'>X</span>,
+  <span class='va'>ICD</span>,
+  <span class='va'>NLP</span>,
+  <span class='va'>HU</span>,
+  <span class='va'>filter</span>,
+  prior <span class='op'>=</span> <span class='st'>"PheNorm"</span>,
+  weight <span class='op'>=</span> <span class='st'>"beta"</span>,
+  nEmpty <span class='op'>=</span> <span class='fl'>20</span>,
+  alpha <span class='op'>=</span> <span class='fl'>100</span>,
+  beta <span class='op'>=</span> <span class='fl'>100</span>,
+  burnin <span class='op'>=</span> <span class='fl'>50</span>,
+  ITER <span class='op'>=</span> <span class='fl'>150</span>,
+  phi <span class='op'>=</span> <span class='cn'>NULL</span>,
+  nCores <span class='op'>=</span> <span class='fl'>1</span>,
+  labeled <span class='op'>=</span> <span class='cn'>NULL</span>,
+  verbose <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -208,6 +206,10 @@
       <th>labeled</th>
       <td><p>(optional) nPatients x nPhenotypes matrix of a priori labels (set missing entries to NA)</p></td>
     </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>(optional) indicating whether to output verbose progress updates</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -234,7 +236,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
