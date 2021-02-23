@@ -1,27 +1,94 @@
 ---
-title: "Example"
+title: "Simulated Example"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{example}
+  %\VignetteIndexEntry{Simulated Example}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup}
 library(sureLDA)
+library(pROC)
 ```
+
+Let N denote the number of patients, W the number of EHR features, and K the number of target phenotypes to be predicted. Our input data consists of 1) X, an NxW matrix of EHR feature counts, 2) ICD, an NxK matrix of key ICD code counts for each target phenotype, 3) NLP, an NxK matrix of key NLP feature counts for each target phenotype, 4) HU, an N-dimensional vector of healthcare utilization measurements (i.e. total patient encounters in a patient's chart), and 5) an NxK matrix of filter indicators for each target phenotype (we assume P(phenotype | filter=0) = 0).
+
+First, we evaluate sureLDA with a PheNorm-generated prior (default) for prediction of 10 target phenotypes using a simulated dataset. We employ 10 'empty' topics (this should generally be set in the range of 10-100).
 
 ```{r}
-str(simdata)
+surelda_run_phenorm <- with(
+  simdata, sureLDA(X, ICD, NLP, HU, filter, nEmpty = 10)
+)
 ```
 
-```{r, eval=TRUE}
-set.seed(123)
-surelda_run <- with(simdata, sureLDA(X, weight, ICD, NLP, HU, filter))
-surelda_scores <- surelda_run$scores
-surelda_probs <- surelda_run$probs
-str(surelda_run)
+Evaluating AUCs of sureLDA scores across 10 phenotypes
+
+```{r, message=FALSE}
+surelda_scores_phenorm_aucs <- sapply(1:ncol(simdata$filter), function(k) {
+  pROC::auc(simdata$Y[, k], surelda_run_phenorm$scores[, k])
+})
 ```
+
+Evaluating AUCs of predicted probabilities across 10 phenotypes
+
+```{r, message=FALSE}
+surelda_ensemble_phenorm_aucs <- sapply(1:ncol(simdata$filter), function(k) {
+  auc(simdata$Y[, k], surelda_run_phenorm$ensemble[, k])
+})
+```
+
+AUCs:
+
+```{r}
+surelda_result_combined <- rbind(surelda_scores_phenorm_aucs, surelda_ensemble_phenorm_aucs)
+rownames(surelda_result_combined) <- c("sureLDA Scores", "sureLDA Probs")
+print(surelda_result_combined)
+```
+
+Next, we evaluate sureLDA's predictions of the same 10 target phenotypes using the same data but given the prior and phi estimators from the previous run.
+
+```{r}
+surelda_prediction <- with(
+  simdata,
+  sureLDA(X, ICD, NLP, HU, filter,
+    prior = surelda_run_phenorm$prior, nEmpty = 10,
+    weight = surelda_run_phenorm$weight, phi = surelda_run_phenorm$phi
+  )
+)
+```
+
+Evaluating AUCs of sureLDA scores across 10 phenotypes
+
+```{r, message=FALSE}
+surelda_scores_prediction_aucs <- sapply(1:ncol(simdata$filter), function(k) {
+  auc(simdata$Y[, k], surelda_prediction$scores[, k])
+})
+```
+
+Evaluating AUCs of predicted probabilities across 10 phenotypes
+
+```{r, message=FALSE}
+surelda_ensemble_prediction_aucs <- sapply(1:ncol(simdata$filter), function(k) {
+  auc(simdata$Y[, k], surelda_prediction$ensemble[, k])
+})
+```
+
+AUCs:
+
+```{r}
+surelda_prediction_result_combined <- rbind(surelda_scores_prediction_aucs, surelda_ensemble_prediction_aucs)
+rownames(surelda_prediction_result_combined) <- c("sureLDA Scores", "sureLDA Probs")
+print(surelda_prediction_result_combined)
+```
+
+```{r, echo=FALSE, eval=FALSE}
+surelda_run_map <- with(simdata, sureLDA(X, ICD, NLP, HU, filter, prior = "MAP"))
+surelda_scores_map <- surelda_run_phenorm$scores
+surelda_ensemble_map <- surelda_run_phenorm$ensemble
+```
+
+Total time spent:
 
 ```{r}
 proc.time()
