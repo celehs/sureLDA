@@ -121,11 +121,11 @@
 <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">surelda_result_combined</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"sureLDA Scores"</span>, <span class="st">"sureLDA Probs"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">surelda_result_combined</span><span class="op">)</span></pre></div>
 <pre><code>##                     [,1]      [,2]      [,3]      [,4]      [,5]      [,6]
-## sureLDA Scores 0.9103678 0.8691175 0.8727423 0.9116667 0.8766576 0.8569323
-## sureLDA Probs  0.9109778 0.8635363 0.8715776 0.9091964 0.8761413 0.8619247
+## sureLDA Scores 0.9111303 0.8685672 0.8728856 0.9111905 0.8777174 0.8555534
+## sureLDA Probs  0.9122825 0.8636673 0.8718642 0.9083631 0.8750543 0.8614492
 ##                     [,7]      [,8]      [,9]     [,10]
-## sureLDA Scores 0.9953893 0.7780069 0.8733098 0.8988316
-## sureLDA Probs  0.9868511 0.7745017 0.8668430 0.8930584</code></pre>
+## sureLDA Scores 0.9959016 0.7792440 0.8736038 0.9015808
+## sureLDA Probs  0.9868511 0.7727148 0.8665491 0.8958076</code></pre>
 <p>Next, we evaluate sureLDA’s predictions of the same 10 target phenotypes using the same data but given the prior and phi estimators from the previous run.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit">
 <span class="va">surelda_prediction</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span>
@@ -155,16 +155,16 @@
 <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">surelda_prediction_result_combined</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"sureLDA Scores"</span>, <span class="st">"sureLDA Probs"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">surelda_prediction_result_combined</span><span class="op">)</span></pre></div>
 <pre><code>##                     [,1]      [,2]      [,3]      [,4]      [,5]      [,6]
-## sureLDA Scores 0.9109948 0.8667592 0.8717567 0.9118750 0.8726630 0.8694370
-## sureLDA Probs  0.9125705 0.8663400 0.8725452 0.9125298 0.8759783 0.8716242
+## sureLDA Scores 0.9117572 0.8666806 0.8697857 0.9115774 0.8727717 0.8669646
+## sureLDA Probs  0.9132991 0.8660256 0.8711833 0.9123810 0.8750543 0.8674401
 ##                     [,7]      [,8]      [,9]     [,10]
-## sureLDA Scores 0.9945355 0.7761512 0.8683128 0.9010309
-## sureLDA Probs  0.9902664 0.7765636 0.8671370 0.8934708</code></pre>
+## sureLDA Scores 0.9959016 0.7758763 0.8684597 0.9014433
+## sureLDA Probs  0.9880464 0.7758763 0.8666961 0.8956701</code></pre>
 <p>Total time spent:</p>
 <div class="sourceCode" id="cb22"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span><span class="op">(</span><span class="op">)</span></pre></div>
 <pre><code>##    user  system elapsed 
-##  89.474   0.451  90.157</code></pre>
+##  82.091   0.487  82.708</code></pre>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
