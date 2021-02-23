@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/spacelab/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -37,14 +37,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sureLDA</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0-1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">Home</a>
+  <a href="../index.html">
+    <span class="fas fa-home"></span>
+     
+  </a>
 </li>
 <li>
   <a href="../articles/example.html">Example</a>
@@ -52,16 +55,10 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li>
-  <a href="https://github.com/celehs/sureLDA">GitHub</a>
-</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/celehs/sureLDA/">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
+  <a href="https://celehs.github.io">CELEHS Software</a>
 </li>
       </ul>
 </div>
@@ -86,9 +83,11 @@
 
     
     
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">sureLDA</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/celehs/sureLDA">sureLDA</a></span><span class="op">)</span></pre></div>
 <pre><code>## Loading required package: Matrix</code></pre>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">pROC</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://expasy.org/tools/pROC/">pROC</a></span><span class="op">)</span></pre></div>
 <pre><code>## Type 'citation("pROC")' for a citation.</code></pre>
 <pre><code>## 
 ## Attaching package: 'pROC'</code></pre>
@@ -97,61 +96,75 @@
 ##     cov, smooth, var</code></pre>
 <p>Let N denote the number of patients, W the number of EHR features, and K the number of target phenotypes to be predicted. Our input data consists of 1) X, an NxW matrix of EHR feature counts, 2) ICD, an NxK matrix of key ICD code counts for each target phenotype, 3) NLP, an NxK matrix of key NLP feature counts for each target phenotype, 4) HU, an N-dimensional vector of healthcare utilization measurements (i.e. total patient encounters in a patient’s chart), and 5) an NxK matrix of filter indicators for each target phenotype (we assume P(phenotype | filter=0) = 0).</p>
 <p>First, we evaluate sureLDA with a PheNorm-generated prior (default) for prediction of 10 target phenotypes using a simulated dataset. We employ 10 ‘empty’ topics (this should generally be set in the range of 10-100).</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">surelda_run_phenorm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span>(
-  <span class="no">simdata</span>, <span class="fu"><a href="../reference/sureLDA.html">sureLDA</a></span>(<span class="no">X</span>, <span class="no">ICD</span>, <span class="no">NLP</span>, <span class="no">HU</span>, <span class="no">filter</span>, <span class="kw">nEmpty</span> <span class="kw">=</span> <span class="fl">10</span>))</pre></body></html></div>
+<div class="sourceCode" id="cb7"><pre class="downlit">
+<span class="va">surelda_run_phenorm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span>
+  <span class="va">simdata</span>, <span class="fu"><a href="../reference/sureLDA.html">sureLDA</a></span><span class="op">(</span><span class="va">X</span>, <span class="va">ICD</span>, <span class="va">NLP</span>, <span class="va">HU</span>, <span class="va">filter</span>, nEmpty <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
+<span class="op">)</span></pre></div>
 <pre><code>## [1] "Starting PheNorm"</code></pre>
 <pre><code>## Warning in if (typeof(weight) == "character" &amp; weight == "uniform") {: the
 ## condition has length &gt; 1 and only the first element will be used</code></pre>
 <pre><code>## [1] "Starting Guided LDA"
 ## [1] "Starting final clustering"</code></pre>
 <p>Evaluating AUCs of sureLDA scores across 10 phenotypes</p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">surelda_scores_phenorm_aucs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span>(<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(<span class="no">simdata</span>$<span class="no">filter</span>),<span class="kw">function</span>(<span class="no">k</span>){
-  <span class="kw pkg">pROC</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/pROC/man/auc.html">auc</a></span>(<span class="no">simdata</span>$<span class="no">Y</span>[,<span class="no">k</span>],<span class="no">surelda_run_phenorm</span>$<span class="no">scores</span>[,<span class="no">k</span>])
-})</pre></body></html></div>
+<div class="sourceCode" id="cb11"><pre class="downlit">
+<span class="va">surelda_scores_phenorm_aucs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">simdata</span><span class="op">$</span><span class="va">filter</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">k</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu">pROC</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pROC/man/auc.html">auc</a></span><span class="op">(</span><span class="va">simdata</span><span class="op">$</span><span class="va">Y</span><span class="op">[</span>, <span class="va">k</span><span class="op">]</span>, <span class="va">surelda_run_phenorm</span><span class="op">$</span><span class="va">scores</span><span class="op">[</span>, <span class="va">k</span><span class="op">]</span><span class="op">)</span>
+<span class="op">}</span><span class="op">)</span></pre></div>
 <p>Evaluating AUCs of predicted probabilities across 10 phenotypes</p>
-<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">surelda_ensemble_phenorm_aucs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span>(<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(<span class="no">simdata</span>$<span class="no">filter</span>),<span class="kw">function</span>(<span class="no">k</span>){
-  <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/auc.html">auc</a></span>(<span class="no">simdata</span>$<span class="no">Y</span>[,<span class="no">k</span>],<span class="no">surelda_run_phenorm</span>$<span class="no">ensemble</span>[,<span class="no">k</span>])
-})</pre></body></html></div>
+<div class="sourceCode" id="cb12"><pre class="downlit">
+<span class="va">surelda_ensemble_phenorm_aucs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">simdata</span><span class="op">$</span><span class="va">filter</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">k</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/auc.html">auc</a></span><span class="op">(</span><span class="va">simdata</span><span class="op">$</span><span class="va">Y</span><span class="op">[</span>, <span class="va">k</span><span class="op">]</span>, <span class="va">surelda_run_phenorm</span><span class="op">$</span><span class="va">ensemble</span><span class="op">[</span>, <span class="va">k</span><span class="op">]</span><span class="op">)</span>
+<span class="op">}</span><span class="op">)</span></pre></div>
 <p>AUCs:</p>
-<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="no">surelda_result_combined</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="no">surelda_scores_phenorm_aucs</span>,<span class="no">surelda_ensemble_phenorm_aucs</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">surelda_result_combined</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'sureLDA Scores'</span>,<span class="st">'sureLDA Probs'</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">surelda_result_combined</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb13"><pre class="downlit">
+<span class="va">surelda_result_combined</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">surelda_scores_phenorm_aucs</span>, <span class="va">surelda_ensemble_phenorm_aucs</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">surelda_result_combined</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"sureLDA Scores"</span>, <span class="st">"sureLDA Probs"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">surelda_result_combined</span><span class="op">)</span></pre></div>
 <pre><code>##                     [,1]      [,2]      [,3]      [,4]      [,5]      [,6]
-## sureLDA Scores 0.9102323 0.8695367 0.8737995 0.9114881 0.8760054 0.8610688
-## sureLDA Probs  0.9117233 0.8638507 0.8724018 0.9086607 0.8754891 0.8660137
+## sureLDA Scores 0.9103678 0.8691175 0.8727423 0.9116667 0.8766576 0.8569323
+## sureLDA Probs  0.9109778 0.8635363 0.8715776 0.9091964 0.8761413 0.8619247
 ##                     [,7]      [,8]      [,9]     [,10]
-## sureLDA Scores 0.9955601 0.7775945 0.8730894 0.9002062
-## sureLDA Probs  0.9865096 0.7710653 0.8669900 0.8947079</code></pre>
+## sureLDA Scores 0.9953893 0.7780069 0.8733098 0.8988316
+## sureLDA Probs  0.9868511 0.7745017 0.8668430 0.8930584</code></pre>
 <p>Next, we evaluate sureLDA’s predictions of the same 10 target phenotypes using the same data but given the prior and phi estimators from the previous run.</p>
-<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="no">surelda_prediction</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span>(<span class="no">simdata</span>,
-                        <span class="fu"><a href="../reference/sureLDA.html">sureLDA</a></span>(<span class="no">X</span>, <span class="no">ICD</span>, <span class="no">NLP</span>, <span class="no">HU</span>, <span class="no">filter</span>, <span class="kw">prior</span> <span class="kw">=</span> <span class="no">surelda_run_phenorm</span>$<span class="no">prior</span>, <span class="kw">nEmpty</span> <span class="kw">=</span> <span class="fl">10</span>,
-                              <span class="kw">weight</span> <span class="kw">=</span> <span class="no">surelda_run_phenorm</span>$<span class="no">weight</span>, <span class="kw">phi</span> <span class="kw">=</span> <span class="no">surelda_run_phenorm</span>$<span class="no">phi</span>))</pre></body></html></div>
+<div class="sourceCode" id="cb15"><pre class="downlit">
+<span class="va">surelda_prediction</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span>
+  <span class="va">simdata</span>,
+  <span class="fu"><a href="../reference/sureLDA.html">sureLDA</a></span><span class="op">(</span><span class="va">X</span>, <span class="va">ICD</span>, <span class="va">NLP</span>, <span class="va">HU</span>, <span class="va">filter</span>,
+    prior <span class="op">=</span> <span class="va">surelda_run_phenorm</span><span class="op">$</span><span class="va">prior</span>, nEmpty <span class="op">=</span> <span class="fl">10</span>,
+    weight <span class="op">=</span> <span class="va">surelda_run_phenorm</span><span class="op">$</span><span class="va">weight</span>, phi <span class="op">=</span> <span class="va">surelda_run_phenorm</span><span class="op">$</span><span class="va">phi</span>
+  <span class="op">)</span>
+<span class="op">)</span></pre></div>
 <pre><code>## Warning in if (typeof(weight) == "character" &amp; weight == "uniform") {: the
 ## condition has length &gt; 1 and only the first element will be used</code></pre>
 <pre><code>## [1] "Inferring theta given provided phi"
 ## [1] "Starting final clustering"</code></pre>
 <p>Evaluating AUCs of sureLDA scores across 10 phenotypes</p>
-<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="no">surelda_scores_prediction_aucs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span>(<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(<span class="no">simdata</span>$<span class="no">filter</span>),<span class="kw">function</span>(<span class="no">k</span>){
-  <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/auc.html">auc</a></span>(<span class="no">simdata</span>$<span class="no">Y</span>[,<span class="no">k</span>],<span class="no">surelda_prediction</span>$<span class="no">scores</span>[,<span class="no">k</span>])
-})</pre></body></html></div>
+<div class="sourceCode" id="cb18"><pre class="downlit">
+<span class="va">surelda_scores_prediction_aucs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">simdata</span><span class="op">$</span><span class="va">filter</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">k</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/auc.html">auc</a></span><span class="op">(</span><span class="va">simdata</span><span class="op">$</span><span class="va">Y</span><span class="op">[</span>, <span class="va">k</span><span class="op">]</span>, <span class="va">surelda_prediction</span><span class="op">$</span><span class="va">scores</span><span class="op">[</span>, <span class="va">k</span><span class="op">]</span><span class="op">)</span>
+<span class="op">}</span><span class="op">)</span></pre></div>
 <p>Evaluating AUCs of predicted probabilities across 10 phenotypes</p>
-<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="no">surelda_ensemble_prediction_aucs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span>(<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span>(<span class="no">simdata</span>$<span class="no">filter</span>),<span class="kw">function</span>(<span class="no">k</span>){
-  <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/auc.html">auc</a></span>(<span class="no">simdata</span>$<span class="no">Y</span>[,<span class="no">k</span>],<span class="no">surelda_prediction</span>$<span class="no">ensemble</span>[,<span class="no">k</span>])
-})</pre></body></html></div>
+<div class="sourceCode" id="cb19"><pre class="downlit">
+<span class="va">surelda_ensemble_prediction_aucs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">simdata</span><span class="op">$</span><span class="va">filter</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">k</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/pROC/man/auc.html">auc</a></span><span class="op">(</span><span class="va">simdata</span><span class="op">$</span><span class="va">Y</span><span class="op">[</span>, <span class="va">k</span><span class="op">]</span>, <span class="va">surelda_prediction</span><span class="op">$</span><span class="va">ensemble</span><span class="op">[</span>, <span class="va">k</span><span class="op">]</span><span class="op">)</span>
+<span class="op">}</span><span class="op">)</span></pre></div>
 <p>AUCs:</p>
-<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="no">surelda_prediction_result_combined</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span>(<span class="no">surelda_scores_prediction_aucs</span>,<span class="no">surelda_ensemble_prediction_aucs</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">surelda_prediction_result_combined</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'sureLDA Scores'</span>,<span class="st">'sureLDA Probs'</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">surelda_prediction_result_combined</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb20"><pre class="downlit">
+<span class="va">surelda_prediction_result_combined</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">surelda_scores_prediction_aucs</span>, <span class="va">surelda_ensemble_prediction_aucs</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">surelda_prediction_result_combined</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"sureLDA Scores"</span>, <span class="st">"sureLDA Probs"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">surelda_prediction_result_combined</span><span class="op">)</span></pre></div>
 <pre><code>##                     [,1]      [,2]      [,3]      [,4]      [,5]      [,6]
-## sureLDA Scores 0.9109100 0.8672833 0.8720793 0.9122024 0.8733696 0.8664892
-## sureLDA Probs  0.9129941 0.8664186 0.8733694 0.9125595 0.8767935 0.8687714
+## sureLDA Scores 0.9109948 0.8667592 0.8717567 0.9118750 0.8726630 0.8694370
+## sureLDA Probs  0.9125705 0.8663400 0.8725452 0.9125298 0.8759783 0.8716242
 ##                     [,7]      [,8]      [,9]     [,10]
-## sureLDA Scores 0.9957309 0.7751890 0.8683128 0.9028179
-## sureLDA Probs  0.9904372 0.7760137 0.8666961 0.8948454</code></pre>
+## sureLDA Scores 0.9945355 0.7761512 0.8683128 0.9010309
+## sureLDA Probs  0.9902664 0.7765636 0.8671370 0.8934708</code></pre>
 <p>Total time spent:</p>
-<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span>()</pre></body></html></div>
+<div class="sourceCode" id="cb22"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span><span class="op">(</span><span class="op">)</span></pre></div>
 <pre><code>##    user  system elapsed 
-##  82.140   0.434  82.641</code></pre>
+##  89.474   0.451  90.157</code></pre>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -167,7 +180,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

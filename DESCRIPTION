@@ -1,7 +1,7 @@
 Package: sureLDA
 Type: Package
 Title: A Novel Multi-Disease Automated Phenotyping Method for the Electronic Health Record
-Version: 0.1.0-1
+Version: 0.1.1
 Authors@R: c(
     person("Yuri", "Ahuja", role = c("aut", "cre"), email = "Yuri_Ahuja@hms.harvard.edu"),
     person("Tianxi", "Cai", role = c("aut")),
