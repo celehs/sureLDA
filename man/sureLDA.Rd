@@ -4,34 +4,70 @@
 \alias{sureLDA}
 \title{Surrogate-guided ensemble Latent Dirichlet Allocation}
 \usage{
-sureLDA(X, weight, ICD, NLP, HU, filter, nEmpty = 20, alpha = 1,
-  beta = 1, burnin = 50, ITER = 150)
+sureLDA(
+  X,
+  ICD,
+  NLP,
+  HU,
+  filter,
+  prior = "PheNorm",
+  weight = "beta",
+  nEmpty = 20,
+  alpha = 100,
+  beta = 100,
+  burnin = 50,
+  ITER = 150,
+  phi = NULL,
+  nCores = 1,
+  labeled = NULL,
+  verbose = FALSE
+)
 }
 \arguments{
-\item{X}{nPatients x nFeatures matrix of feature counts}
-
-\item{weight}{nPhenotypes x nFeatures matrix of phenotype-specific feature weights}
+\item{X}{nPatients x nFeatures matrix of EHR feature counts}
 
 \item{ICD}{nPatients x nPhenotypes matrix of main ICD surrogate counts}
 
 \item{NLP}{nPatients x nPhenotypes matrix of main NLP surrogate counts}
 
-\item{HU}{nPatients-dimensional hospital utilization vector}
+\item{HU}{nPatients-dimensional vector containing the healthcare utilization feature}
 
 \item{filter}{nPatients x nPhenotypes binary matrix indicating filter-positives}
 
-\item{nEmpty}{Number of 'empty' topics to include in LDA step}
+\item{prior}{'PheNorm', 'MAP', or nPatients x nPhenotypes matrix of prior probabilities (defaults to PheNorm)}
 
-\item{alpha}{LDA hyperparameters}
+\item{weight}{'beta', 'uniform', or nPhenotypes x nFeatures matrix of feature weights (defaults to beta)}
 
-\item{beta}{LDA hyperparameters}
+\item{nEmpty}{Number of 'empty' topics to include in LDA step (defaults to 10)}
 
-\item{burnin}{number of burnin Gibbs iterations}
+\item{alpha}{LDA Dirichlet hyperparameter for patient-topic distribution (defaults to 100)}
 
-\item{ITER}{number of subsequent iterations for inference}
+\item{beta}{LDA Dirichlet hyperparameter for topic-feature distribution (defaults to 100)}
+
+\item{burnin}{number of burnin Gibbs iterations (defaults to 50)}
+
+\item{ITER}{number of subsequent iterations for inference (defaults to 150)}
+
+\item{phi}{(optional) nPhenotypes x nFeatures pre-trained topic-feature distribution matrix}
+
+\item{nCores}{(optional) Number of parallel cores to use only if phi is provided (defaults to 1)}
+
+\item{labeled}{(optional) nPatients x nPhenotypes matrix of a priori labels (set missing entries to NA)}
+
+\item{verbose}{(optional) indicating whether to output verbose progress updates}
 }
 \value{
-scores = nPatients x nPhenotypes matrix of sureLDA phenotype scores; probs = nPatients x nPhenotypes matrix of posterior probabilities (post-clustering of sureLDA scores)
+scores nPatients x nPhenotypes matrix of weighted patient-phenotype assignment counts from LDA step
+
+probs nPatients x nPhenotypes matrix of patient-phenotype posterior probabilities
+
+ensemble Mean of sureLDA posterior and PheNorm/MAP prior
+
+prior nPatients x nPhenotypes matrix of PheNorm/MAP phenotype probability estimates
+
+phi nPhenotypes x nFeatures topic distribution matrix from LDA step
+
+weights nPhenotypes x nFeatures matrix of topic-feature weights
 }
 \description{
 Surrogate-guided ensemble Latent Dirichlet Allocation

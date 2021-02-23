@@ -6,7 +6,7 @@
 #' @name sureLDA-package
 #' @keywords package
 #' @useDynLib sureLDA
-#' @import Matrix Rcpp RcppArmadillo
+#' @import Matrix Rcpp RcppArmadillo glmnet
 #' @importFrom stats ecdf
 #' @importFrom stats lm
 #' @importFrom stats pnorm

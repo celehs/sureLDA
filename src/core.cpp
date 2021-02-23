@@ -37,7 +37,7 @@ void init_lda_v2(arma::umat& wp, arma::umat& dp, arma::uvec& ztot,
             currprob +=  probs[ttt];
         }
         z[i] = ttt;
-        
+
         wp(ttt, w[i]) += weight(ttt,w[i]);
         dp(ttt, d[i]) += weight(ttt,w[i]);
         ztot[ttt] += weight(ttt,w[i]);
@@ -57,7 +57,7 @@ arma::umat lda_rcpp(arma::uvec d, arma::uvec w, arma::uvec z,
                     arma::umat weight, arma::mat prior, double alpha,
                     double beta, int T, int knowndiseases,
                     int burnin, int ITER, bool verbose){
-    
+
     int N = d.n_elem;
     int W = weight.n_cols;
     int D = prior.n_cols;
@@ -66,13 +66,13 @@ arma::umat lda_rcpp(arma::uvec d, arma::uvec w, arma::uvec z,
     arma::vec probs(T);
     arma::uvec ztot(T);
     ztot.zeros();
-    
+
     arma::umat res(T,D+W);
     res.zeros();
-    
+
     double Z=0.0, U, currprob;
     double Wbeta = W*beta;
-    
+
     arma::umat wp(T,W);
     wp.zeros();
     arma::umat dp(T,D);
@@ -83,7 +83,7 @@ arma::umat lda_rcpp(arma::uvec d, arma::uvec w, arma::uvec z,
     }
     
     init_lda_v2(wp, dp, ztot, weight, prior, d, w, z, N, T, knowndiseases);
-    
+
     for(iter=0;iter<ITER+burnin;iter++){
         
         for(i=0;i<N;i++){
@@ -117,12 +117,12 @@ arma::umat lda_rcpp(arma::uvec d, arma::uvec w, arma::uvec z,
         if(iter>=burnin){
             //res.slice(iter-burnin) = dp;
             for(t=0;t<T;t++){
-                for(i=0;i<D;i++){
-                    res(t,i) += dp(t,i);
-                }
-                for(i=0;i<W;i++){
-                    res(t,D+i) += wp(t,i);
-                }
+               for(i=0;i<D;i++){
+                   res(t,i) += dp(t,i);
+               }
+               for(i=0;i<W;i++){
+                   res(t,D+i) += wp(t,i);
+               }
             }
             if (verbose){
                 Rcout << "On iteration " << iter-burnin << "of" << ITER << "\n";
