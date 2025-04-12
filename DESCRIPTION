@@ -1,34 +1,33 @@
 Package: sureLDA
 Type: Package
 Title: A Novel Multi-Disease Automated Phenotyping Method for the Electronic Health Record
-Version: 0.1.1
+Version: 0.1.1.9000
 Authors@R: c(
     person("Yuri", "Ahuja", role = c("aut", "cre"), email = "Yuri_Ahuja@hms.harvard.edu"),
-    person("Tianxi", "Cai", role = c("aut")),
-    person(family = "PARSE LTD", role = c("aut"))   
-    )
+    person("CELEHS", "Lab", role = "aut"),
+    person("PARSE", "Health", role = "aut"))
 Description: A Novel Multi-Disease Automated Phenotyping Method for the Electronic Health Record.
 URL: https://github.com/celehs/sureLDA
 BugReports: https://github.com/celehs/sureLDA/issues
 License: GPL-3
 Encoding: UTF-8
-RoxygenNote: 7.1.1
+RoxygenNote: 7.3.2
 Depends: 
     R (>= 3.0), 
     Matrix
-Imports: 
-    pROC,
+Imports:
+    foreach,
     glmnet,
     MAP,
     Rcpp, 
-    RcppArmadillo,
-    foreach,
-    doParallel
-LinkingTo: 
+    RcppArmadillo
+LinkingTo:
     Rcpp, 
     RcppArmadillo
-Suggests: 
+Suggests:
+    doParallel,
     knitr,
+    pROC,
     rmarkdown
 VignetteBuilder: knitr
 LazyData: true

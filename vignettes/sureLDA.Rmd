@@ -1,11 +1,19 @@
 ---
-title: "Simulated Example"
+title: "sureLDA"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Simulated Example}
+  %\VignetteIndexEntry{sureLDA}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
 
 ```{r setup}
 library(sureLDA)

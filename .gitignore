@@ -3,3 +3,6 @@
 .RData
 .Ruserdata
 inst/doc
+sureLDA.Rcheck/
+sureLDA*.tar.gz
+sureLDA*.tgz
